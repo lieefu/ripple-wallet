@@ -1,0 +1,17 @@
+{
+    "name": "ripple-wallet-server",
+    "version": "1.0.0",
+    "description": "Ripple Wallet Server",
+    "main": "app.js",
+    "scripts": {
+        "start":"node app.js",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Lieefu Way",
+    "license": "ISC",
+    "dependencies": {
+        "express": "^4.15.2",
+        "ripple-lib": "^0.17.6",
+        "socket.io": "^1.7.3"
+    }
+}
