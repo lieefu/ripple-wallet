@@ -1,0 +1,4 @@
+<br><br>
+<span *ngIf="wallet">钱包地址：{{wallet?.address}} 私钥：{{wallet?.seed}} </span>
+<br><br>
+<button class="btn btn-primary" (click)="createWallet()">点击一次，随机产生一个新钱包地址，满意为止，点击保存按钮，生成钱包文件</button> <button class="btn btn-primary">保存</button>

@@ -1,3 +1,51 @@
-<h1>
-  {{title}}
-</h1>
+<header>
+  <nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse">
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    <a class="navbar-brand" href="#">Navbar</a>
+
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Link</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" href="#">Disabled</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+          <div class="dropdown-menu" aria-labelledby="dropdown01">
+            <a class="dropdown-item" href="#">Action</a>
+            <a class="dropdown-item" href="#">Another action</a>
+            <a class="dropdown-item" href="#">Something else here</a>
+          </div>
+        </li>
+      </ul>
+      <form class="form-inline my-2 my-md-0">
+        <input class="form-control mr-sm-2" type="text" placeholder="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      </form>
+    </div>
+  </nav>
+</header>
+<div class="container main-container">
+  <div class="jumbotron">
+    <h1>生成钱包</h1>
+    <p class="lead">支持三种方式生成钱包：创建新钱包、大脑钱包和导入私钥，分别对应下面的三个按钮，选择其一即可。</p>
+    <a class="btn btn-lg btn-primary" role="button" routerLink="createwallet">创建新钱包</a> <a class="btn btn-lg btn-primary" role="button"  routerLink="privatekeywallet">导入私钥创建钱包</a> <a class="btn btn-lg btn-primary" role="button"  routerLink="brainwallet">大脑钱包</a>
+    <hr>
+    <router-outlet></router-outlet>
+  </div>
+</div>
+
+<!-- 底部区域 -->
+<footer class="navbar navbar-light bg-faded">
+  <div class="container">
+    <p>Designed and built by the <a href="http://www.lieefu.com" target="_blank">Lieefu Way</a>, My Email: <a href="mailto:lieefu@gmail.com">lieefu@gmail.com</a>
+    </p>
+  </div>
+</footer>
