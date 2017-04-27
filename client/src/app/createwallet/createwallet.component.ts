@@ -7,6 +7,7 @@ import {RippleService} from '../ripple.service';
 })
 export class CreatewalletComponent implements OnInit {
     wallet;
+    isSave:boolean=false;
     constructor(private ripple: RippleService) {
     }
 
@@ -14,5 +15,8 @@ export class CreatewalletComponent implements OnInit {
     }
     createWallet(){
         this.ripple.createWallet().subscribe(wallet => this.wallet=wallet);
+    }
+    saveWallet(){
+        this.ripple.saveWallet().subscribe(result=>this.isSave=result.ok);
     }
 }

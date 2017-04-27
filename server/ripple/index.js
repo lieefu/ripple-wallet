@@ -21,7 +21,7 @@ rippleApi.on('disconnected', (code) => {
 });
 
 module.exports = {
-    ripple:function(fname, ...args) {
+    ripple: function(fname, ...args) {
         return new Promise(function(resolve, reject) {
             if (rippleApi.isConnected()) {
                 invokeRipple(resolve, reject, fname, ...args);
@@ -34,7 +34,9 @@ module.exports = {
     },
     createWallet,
     createWalletFromSeed,
-    createWalletFromPhrase
+    createWalletFromPhrase,
+    encryptSeed,
+    decryptSeed
 }
 ///////////////////////////
 function invokeRipple(resolve, reject, fname, ...args) {
@@ -55,17 +57,49 @@ function createWallet(options = {}) {
     const seed = keypairs.generateSeed(options);
     const keypair = keypairs.deriveKeypair(seed);
     const address = keypairs.deriveAddress(keypair.publicKey);
-    return {address, seed};
+    return {
+        address,
+        seed
+    };
 }
+
 function createWalletFromSeed(seed) {
     const keypair = keypairs.deriveKeypair(seed);
     const address = keypairs.deriveAddress(keypair.publicKey);
-    return {address, seed};
+    return {
+        address,
+        seed
+    };
 }
+
 function createWalletFromPhrase(phrase) {
     var phraseHash = hash.update(phrase).digest();
-    const seed = keypairs.generateSeed({entropy:phraseHash});
+    const seed = keypairs.generateSeed({
+        entropy: phraseHash
+    });
     const keypair = keypairs.deriveKeypair(seed);
     const address = keypairs.deriveAddress(keypair.publicKey);
-    return {address, seed};
+    return {
+        address,
+        seed
+    };
+}
+
+function encryptSeed(seed, password) {
+    const crypto = require('crypto');
+    const cipher = crypto.createCipher('aes192', password);
+    let encrypted = cipher.update(seed, 'utf8', 'hex');
+    encrypted += cipher.final('hex');
+    console.log(encrypted);
+    return encrypted;
+}
+
+function decryptSeed(data, password) {
+    const crypto = require('crypto');
+    const decipher = crypto.createDecipher('aes192',password);
+    const encrypted = data;
+    let decrypted = decipher.update(encrypted, 'hex', 'utf8');
+    decrypted += decipher.final('utf8');
+    console.log(decrypted);
+    return decrypted;
 }

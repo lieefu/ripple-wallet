@@ -10,6 +10,7 @@ import { CreatewalletComponent } from './createwallet/createwallet.component';
 import { BrainwalletComponent } from './brainwallet/brainwallet.component';
 import { PrivatewalletComponent } from './privatewallet/privatewallet.component';
 import { EncryptwalletComponent } from './encryptwallet/encryptwallet.component';
+import { WalletComponent } from './wallet/wallet.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { EncryptwalletComponent } from './encryptwallet/encryptwallet.component'
     CreatewalletComponent,
     BrainwalletComponent,
     PrivatewalletComponent,
-    EncryptwalletComponent
+    EncryptwalletComponent,
+    WalletComponent
   ],
   imports: [
     BrowserModule,

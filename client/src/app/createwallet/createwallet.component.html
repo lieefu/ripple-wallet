@@ -1,4 +1,8 @@
 <br><br>
 <span *ngIf="wallet">钱包地址：{{wallet?.address}} 私钥：{{wallet?.seed}} </span>
 <br><br>
-<button class="btn btn-primary" (click)="createWallet()">点击一次，随机产生一个新钱包地址，满意为止，点击保存按钮，生成钱包文件</button> <button class="btn btn-primary">保存</button>
+<button class="btn btn-primary" (click)="createWallet()">点击一次，随机产生一个新钱包地址，点到满意为止，然后点击保存按钮，保存钱包文件</button>
+<button class="btn btn-primary" (click)="saveWallet()">保存</button>
+钱包文件保存后提示
+<a class="btn btn-lg btn-primary" role="button" routerLink="encryptwallet">加密新钱包</a>
+<router-outlet></router-outlet>

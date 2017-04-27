@@ -1,19 +1,35 @@
 import { Injectable } from '@angular/core';
-import { Http, Response }          from '@angular/http';
+import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 @Injectable()
 export class RippleService {
     constructor(private http: Http) { }
+    getWallets():Observable<JSON> {
+        return this.httpget('api/getwallets');
+    }
     createWallet(): Observable<JSON> {
-        return this.http.get('api/createwallet/new')
+        return this.httpget('api/createwallet/new');
+    }
+    saveWallet():Observable<any>{
+        return this.httpget('api/savewallet');
+    }
+    encryptWallet(address,password){
+        return this.httpget('api/encryptwallet/'+address+"/"+password);
+    }
+    decryptWallet(address,password){
+        return this.httpget('api/decryptwallet/'+address+"/"+password);
+    }
+    //////////////////////////////////
+    private httpget(url){
+        return this.http.get(url)
             .map(this.extractData)
             .catch(this.handleError);
     }
     private extractData(res: Response) {
-        let body = res.json();
-        return body.data || {};
+        let data = res.json();
+        return data || {};
     }
     private handleError(error: Response | any) {
         // In a real world app, you might use a remote logging infrastructure

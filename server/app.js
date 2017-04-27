@@ -1,7 +1,14 @@
 'use strict';
 var path = require('path');
 const express=require("express");
+const session = require('express-session');
 const app = express();
+app.use(session({
+  secret: 'ripplewalletbuildbylieefu', // 建议使用 128 个字符的随机字符串
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false  }//only https set to true and app.set('trust proxy', 1) // trust first proxy
+}));
 var server = require('http').Server(app);
 var socketio = require('socket.io')(server);
 var config = require("./config.js");
