@@ -6,11 +6,11 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class RippleService {
     constructor(private http: Http) { }
-    getWallets():Observable<JSON> {
+    getWallets():Observable<any> {
         return this.httpget('api/getwallets');
     }
-    createWallet(): Observable<JSON> {
-        return this.httpget('api/createwallet/new');
+    createWallet(seed): Observable<any> {
+        return this.httpget('api/createwallet/'+seed);
     }
     saveWallet():Observable<any>{
         return this.httpget('api/savewallet');

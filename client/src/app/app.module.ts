@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 import {appRoutes} from './app.routes';
+import { GlobalVariable } from './global-variable';
 import {RippleService} from './ripple.service';
 import { AppComponent } from './app.component';
 import { CreatewalletComponent } from './createwallet/createwallet.component';
 import { BrainwalletComponent } from './brainwallet/brainwallet.component';
-import { PrivatewalletComponent } from './privatewallet/privatewallet.component';
+import { SeedwalletCompoent } from './seedwallet/seedwallet.component';
 import { EncryptwalletComponent } from './encryptwallet/encryptwallet.component';
 import { WalletComponent } from './wallet/wallet.component';
 
@@ -17,7 +18,7 @@ import { WalletComponent } from './wallet/wallet.component';
     AppComponent,
     CreatewalletComponent,
     BrainwalletComponent,
-    PrivatewalletComponent,
+    SeedwalletCompoent,
     EncryptwalletComponent,
     WalletComponent
   ],
@@ -27,7 +28,7 @@ import { WalletComponent } from './wallet/wallet.component';
     FormsModule,
     HttpModule
   ],
-  providers: [RippleService],
+  providers: [RippleService,GlobalVariable],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

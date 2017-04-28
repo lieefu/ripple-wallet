@@ -82,7 +82,6 @@ router.get('/decryptwallet/:address/:password',(req,res)=>{
             }catch(err){
                 return resultError(res,"口令错误");
             }
-
         }
         return resultError(res, "钱包文件格式错误");
     });
@@ -97,6 +96,10 @@ router.get('/encryptwallet/:address/:password', (req, res) => {
             return resultError(res, "钱包文件不存在");
         }
         let wallet = JSON.parse(data);
+        console.log(wallet);
+        if(wallet.islocked){
+            return resultError(res, "钱包已经被加密过了，不能重复加密！");
+        }
         if (wallet.islocked == false) {
             console.log("加密钱包");
             wallet.msg = "加密好了，哈";
@@ -111,7 +114,7 @@ router.get('/encryptwallet/:address/:password', (req, res) => {
             });
             return;
         }
-        return resultError(res, "钱包已经被加密或者格式错误！");
+        return resultError(res, "加密失败，因为钱包数据错误！");
     })
 
 })

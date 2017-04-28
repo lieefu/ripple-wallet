@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PrivatewalletComponent } from './privatewallet.component';
+import { SeedwalletCompoent } from './seedwallet.component';
 
-describe('PrivatewalletComponent', () => {
-  let component: PrivatewalletComponent;
-  let fixture: ComponentFixture<PrivatewalletComponent>;
+describe('SeedwalletCompoent', () => {
+  let component: SeedwalletCompoent;
+  let fixture: ComponentFixture<SeedwalletCompoent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PrivatewalletComponent ]
+      declarations: [ SeedwalletCompoent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PrivatewalletComponent);
+    fixture = TestBed.createComponent(SeedwalletCompoent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

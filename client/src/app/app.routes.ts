@@ -2,7 +2,7 @@ import { RouterModule } from '@angular/router';
 import { WalletComponent} from './wallet/wallet.component';
 import { CreatewalletComponent} from './createwallet/createwallet.component';
 import { BrainwalletComponent}   from './brainwallet/brainwallet.component';
-import { PrivatewalletComponent} from './privatewallet/privatewallet.component';
+import { SeedwalletCompoent} from './seedwallet/seedwallet.component';
 import {EncryptwalletComponent} from './encryptwallet/encryptwallet.component';
 
 export const appRoutes = [
@@ -18,10 +18,16 @@ export const appRoutes = [
               ]
             }, {
               path: 'brainwallet',
-              component: BrainwalletComponent
+              component: BrainwalletComponent,
+              children: [
+                { path: 'encryptwallet', component: EncryptwalletComponent }
+              ]
             }, {
-              path: 'privatekeywallet',
-              component: PrivatewalletComponent
+              path: 'seedwallet',
+              component: SeedwalletCompoent,
+              children: [
+                { path: 'encryptwallet', component: EncryptwalletComponent }
+              ]
             }
         ]
     }

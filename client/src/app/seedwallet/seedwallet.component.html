@@ -4,6 +4,9 @@
   <p id="helpBlock" class="form-text text-muted">
   拥有私钥就拥有钱包内财产支配权，因此私钥永不示人，以保障钱包安全。
 </p>
-<button class="btn btn-primary" (click)="importWallet()">导入</button>{{tipinfo}}
-<a class="btn btn-lg btn-primary" role="button" routerLink="encryptwallet" *ngIf="wallet">加密钱包</a>
+<button class="btn btn-primary" (click)="importWallet()">导入</button>
+<button class="btn btn-primary" (click)="saveWallet()" *ngIf="wallet">保存</button>
+<br>
+<span>{{tipinfo}}</span>
+<a class="btn btn-lg btn-primary" role="button" routerLink="encryptwallet" *ngIf="isSave">加密钱包</a>
 <router-outlet></router-outlet>

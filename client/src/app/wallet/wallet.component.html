@@ -1,7 +1,15 @@
 <div class="jumbotron">
   <h1>生成钱包</h1>
-  <p class="lead">支持三种方式生成钱包：创建新钱包、大脑钱包和导入私钥，分别对应下面的三个按钮，选择其一即可。</p>
-  <a class="btn btn-lg btn-primary" role="button" routerLink="createwallet">创建新钱包</a> <a class="btn btn-lg btn-primary" role="button"  routerLink="privatekeywallet">导入私钥创建钱包</a> <a class="btn btn-lg btn-primary" role="button"  routerLink="brainwallet">大脑钱包</a>
+  <p class="lead">
+      支持三种方式：创建新钱包、导入私钥恢复钱包和大脑钱包，分别对应下面的三个按钮，选择其一即可。
+      “创建新钱包”，程序帮你随机建立一个新钱包；
+      “导入私钥恢复钱包”，输入已有钱包的私钥，用私钥恢复出已有钱包；
+      “大脑钱包”，输入一句自己熟悉的句子，用这个句子创建新钱包，只要大脑记住这个句子，就能随时使用这个钱包。
+  </p>
+  <a class="btn btn-lg btn-primary" role="button" routerLink="createwallet" routerLinkActive="active">创建新钱包</a>
+  <a class="btn btn-lg btn-primary" role="button"  routerLink="seedwallet" routerLinkActive="active">导入私钥恢复钱包</a>
+  <a class="btn btn-lg btn-primary" role="button"  routerLink="brainwallet" routerLinkActive="active">大脑钱包</a>
+   <a class="btn btn-lg btn-success" role="button"  routerLink="/" routerLinkActive="active" *ngIf="gv.wallet">返回首页，开始使用钱包</a>
   <hr>
   <router-outlet></router-outlet>
 </div>

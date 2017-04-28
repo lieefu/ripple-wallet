@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
+import { GlobalVariable } from '../global-variable';
 @Component({
   selector: 'app-wallet',
   templateUrl: './wallet.component.html',
@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class WalletComponent implements OnInit {
 
-  constructor() { }
+  constructor(private gv:GlobalVariable) { }
 
   ngOnInit() {
   }
