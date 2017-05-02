@@ -26,34 +26,54 @@ router.get('/getwallets',(req,res)=>{
         return resultOk(res,addressarray);
     })
 })
+///////////////////////////////////////
+router.get("/getwallet/:address",(req,res)=>{
+    let address= req.params.address;
+    let wallet={};
+    let filename = config.dataPath + address + ".key";
+    fs.readFile(filename, "utf-8",(err, data) => {
+        if (err) {
+            return resultError(res, "钱包文件不存在");
+        }
+        let wallet = JSON.parse(data);
+        return resultOk(res, wallet);
+    });
+});
 //////////////////////////////////////
 router.get("/brainwallet/:phrase", (req, res) => {
     let phrase = req.params.phrase;
     let wallet = {};
     wallet = Ripple.createWalletFromPhrase(phrase);
     wallet.ver = "1.0";
-    wallet.islocked = false;
+    wallet.isLocked = false;
+    wallet.isSecreted = false;
+    req.session.wallet = wallet;
+    resultOk(res, wallet);
+});
+//////////////////////////////////////
+router.get("/newwallet", (req, res) => {
+    let wallet = {};
+    wallet = Ripple.createWallet();
+    wallet.ver = "1.0";
+    wallet.isLocked = false;
+    wallet.isSecreted = false;
     req.session.wallet = wallet;
     console.log(req.session, req.session.id);
     resultOk(res, wallet);
 });
 //////////////////////////////////////
-router.get("/createwallet/:seed", (req, res) => {
+router.get("/importwallet/:seed", (req, res) => {
     let seed = req.params.seed;
     let wallet = {};
-    if (seed === "new") {
-        wallet = Ripple.createWallet();
-    } else {
-        try {
-            wallet = Ripple.createWalletFromSeed(seed);
-        } catch (err) {
-            return resultError(res, "私钥错误！");
-        }
+    try {
+        wallet = Ripple.createWalletFromSeed(seed);
+    } catch (err) {
+        return resultError(res, "私钥错误！");
     }
     wallet.ver = "1.0";
-    wallet.islocked = false;
+    wallet.isLocked = false;
+    wallet.isSecreted = false;
     req.session.wallet = wallet;
-    console.log(req.session, req.session.id);
     resultOk(res, wallet);
 });
 //////////////////////////////////////
@@ -82,15 +102,16 @@ router.get('/decryptwallet/:address/:password',(req,res)=>{
             return resultError(res, "钱包文件不存在");
         }
         let wallet = JSON.parse(data);
-        if(wallet.islocked){
+        if(wallet.isSecreted){
             console.log("解密钱包");
             try{
-                wallet.seed = Ripple.decryptSeed(wallet.seed,password);
-                wallet.msg = "解密好了，哈";
-                wallet.islocked = false;
+                wallet.seed = Ripple.decryptSeed(wallet.secret,password);
+                //wallet.msg = "解密好了，哈";
+                wallet.isLocked = false;
+                wallet.isSecreted = true;
                 return resultOk(res, wallet);
             }catch(err){
-                return resultError(res,"口令错误");
+                return resultError(res,"密码错误");
             }
         }
         return resultError(res, "钱包文件格式错误");
@@ -107,14 +128,16 @@ router.get('/encryptwallet/:address/:password', (req, res) => {
         }
         let wallet = JSON.parse(data);
         console.log(wallet);
-        if(wallet.islocked){
+        if(wallet.isSecreted){
             return resultError(res, "钱包已经被加密过了，不能重复加密！");
         }
-        if (wallet.islocked == false) {
+        if (wallet.isSecreted == false) {
             console.log("加密钱包");
-            wallet.msg = "加密好了，哈";
-            wallet.seed = Ripple.encryptSeed(wallet.seed,password);
-            wallet.islocked = true;
+            //wallet.msg = "加密好了，哈";
+            wallet.secret = Ripple.encryptSeed(wallet.seed,password);
+            wallet.seed = "";
+            wallet.isSecreted = true;//加密保护了
+            wallet.isLocked = true;//锁定了
             //return resultOk(res, wallet);
             fs.writeFile(filename, JSON.stringify(wallet), function(err) {
                 if (err) {

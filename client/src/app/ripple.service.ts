@@ -6,14 +6,21 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class RippleService {
     constructor(private http: Http) { }
+    ///////////////////////
+    getWallet(address):Observable<any>{
+        return this.httpget('api/getwallet/'+address);
+    }
     getWallets():Observable<any> {
         return this.httpget('api/getwallets');
     }
     brainWallet(phrase): Observable<any> {
         return this.httpget('api/brainwallet/'+phrase);
     }
-    createWallet(seed): Observable<any> {
-        return this.httpget('api/createwallet/'+seed);
+    newWallet(): Observable<any> {
+        return this.httpget('api/newwallet');
+    }
+    importWallet(seed): Observable<any> {
+        return this.httpget('api/importwallet/'+seed);
     }
     saveWallet():Observable<any>{
         return this.httpget('api/savewallet');
@@ -25,6 +32,9 @@ export class RippleService {
         return this.httpget('api/decryptwallet/'+address+"/"+password);
     }
     //////////////////////////////////
+    accountinfo(address){
+        return this.httpget("api/accountinfo/"+address);
+    }
     private httpget(url){
         return this.http.get(url)
             .map(this.extractData)

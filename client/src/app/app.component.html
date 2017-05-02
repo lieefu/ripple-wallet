@@ -4,29 +4,37 @@
         <span class="navbar-toggler-icon"></span>
       </button>
     <a class="navbar-brand" routerLink="/">RippleWallet</a>
-
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item" routerLinkActive="active">
           <a class="nav-link" routerLink="/">首页 <span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" routerLink="wallet" [class.disabled]="gv.wallet">创建钱包</a>
+          <a class="nav-link" routerLink="walletinfo">钱包</a>
         </li>
         <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link disabled" href="#">Disabled</a>
+          <a class="nav-link" routerLink="send">转账</a>
         </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
-          <div class="dropdown-menu" aria-labelledby="dropdown01">
-            <a class="dropdown-item" href="#">Action</a>
-            <a class="dropdown-item" href="#">Another action</a>
-            <a class="dropdown-item" href="#">Something else here</a>
-          </div>
+        <li class="nav-item" routerLinkActive="active">
+          <a class="nav-link" routerLink="trade">交易</a>
+        </li>
+        <li class="nav-item" routerLinkActive="active">
+          <a class="nav-link" routerLink="withdraw">提现</a>
+        </li>
+        <li class="nav-item" routerLinkActive="active">
+          <a class="nav-link" routerLink="deposit">充值</a>
+        </li>
+        <li class="nav-item" routerLinkActive="active">
+          <a class="nav-link" routerLink="setting">设置</a>
+        </li>
+        <li class="nav-item" routerLinkActive="active">
+          <a class="nav-link" routerLink="advance" [class.disabled]="gv.wallet">高级</a>
         </li>
       </ul>
       <form class="form-inline my-2 my-md-0">
-          <span class="badge badge-success"  *ngIf="gv.wallet">{{gv.wallet.address}}</span> <span class="badge badge-default"  *ngIf="gv.wallet?.islocked">P</span>
+          <span class="badge badge-success"  *ngIf="gv.wallet">{{gv.wallet.address}}</span>
+          <span class="badge badge-default"  *ngIf="gv.wallet?.isSecreted">P</span>
+          <span class="badge badge-default"  *ngIf="gv.wallet?.isLocked">L</span>
       </form>
     </div>
   </nav>

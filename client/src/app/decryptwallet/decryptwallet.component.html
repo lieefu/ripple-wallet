@@ -1,0 +1,8 @@
+<div class="form-group">
+  <label for="password0">钱包密码</label>
+  <input type="text" class="form-control" id="password" [(ngModel)]="password" placeholder="钱包密码" type="password"  aria-describedby="passwordHelpBlock">
+  <p id="passwordHelpBlock" class="form-text text-muted">
+  输入钱包密码。
+</p>
+</div>
+<button class="btn btn-primary" (click)="decryptWallet()">确认</button>{{tipinfo}}

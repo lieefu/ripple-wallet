@@ -19,8 +19,8 @@ export class SeedwalletCompoent implements OnInit {
     importWallet(){
         this.tipinfo="";
         this.isSave=false;
-        this.router.navigate(['/wallet/seedwallet']);
-        this.ripple.createWallet(this.seed).subscribe(result => {
+        this.router.navigate(['/createwallet/seedwallet']);
+        this.ripple.importWallet(this.seed).subscribe(result => {
             if(result.ok){
                 this.wallet=result.data;
                 this.tipinfo = "导入私钥成功！接下来你应该点击保存按钮，保存这个钱包。";

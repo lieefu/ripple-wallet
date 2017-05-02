@@ -1,12 +1,12 @@
 <div class="form-group">
-  <label for="password0">钱包口令</label>
-  <input type="text" class="form-control" id="password0" [(ngModel)]="password0" placeholder="钱包口令" type="password"  aria-describedby="passwordHelpBlock">
+  <label for="password0">钱包密码</label>
+  <input type="text" class="form-control" id="password0" [(ngModel)]="password0" placeholder="钱包密码" type="password"  aria-describedby="passwordHelpBlock">
   <p id="passwordHelpBlock" class="form-text text-muted">
-  钱包内容使用此口令加密保存，建议使用复杂口令，保证钱包安全。
+  钱包内容使用此密码加密保存，建议使用复杂密码，保证钱包安全。
 </p>
 </div>
 <div class="form-group">
-  <label for="password1">确认口令</label>
-  <input type="text" class="form-control" id="password1"  [(ngModel)]="password1" placeholder="钱包口令确认" type="password">
+  <label for="password1">确认密码</label>
+  <input type="text" class="form-control" id="password1"  [(ngModel)]="password1" placeholder="钱包密码确认" type="password">
 </div>
 <button class="btn btn-primary" (click)="encryptWallet()">确认</button>{{tipinfo}}
