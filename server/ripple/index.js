@@ -4,7 +4,6 @@ const {
 } = require('ripple-lib');
 const keypairs = require('ripple-keypairs');
 const crypto = require('crypto');
-const hash = crypto.createHash('sha256');
 const rippleApi = new RippleAPI({
     server: 'wss://s1.ripple.com' // Public rippled server hosted by Ripple, Inc.
 });
@@ -73,6 +72,7 @@ function createWalletFromSeed(seed) {
 }
 
 function createWalletFromPhrase(phrase) {
+    const hash = crypto.createHash('sha256');
     var phraseHash = hash.update(phrase).digest();
     const seed = keypairs.generateSeed({
         entropy: phraseHash

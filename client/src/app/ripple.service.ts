@@ -9,6 +9,9 @@ export class RippleService {
     getWallets():Observable<any> {
         return this.httpget('api/getwallets');
     }
+    brainWallet(phrase): Observable<any> {
+        return this.httpget('api/brainwallet/'+phrase);
+    }
     createWallet(seed): Observable<any> {
         return this.httpget('api/createwallet/'+seed);
     }

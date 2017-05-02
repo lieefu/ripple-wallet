@@ -1,9 +1,14 @@
 <div class="form-group">
-  <label for="seed">钱包私钥</label>
-  <input type="text" class="form-control" id="seed" [(ngModel)]="seed" placeholder="录入或者粘贴钱包私钥" aria-describedby="helpBlock">
+  <label for="brainmsg">录入一段文字</label>
+  <textarea class="form-control" id="brainmsg" [(ngModel)]="phrase" placeholder="录入或者粘贴一段文字，依据此内容，生成钱包" aria-describedby="helpBlock" rows="3"></textarea>
   <p id="helpBlock" class="form-text text-muted">
-  拥有私钥就拥有钱包内财产支配权，因此私钥永不示人，以保障钱包安全。
+  只要记住这段文字，随时可恢复出自己的钱包，这是最方便使用的钱包，也是最不安全的钱包，因为你想出的这段文字，容易被别人猜到。
 </p>
-<button class="btn btn-primary" (click)="importWallet()">导入</button>{{tipinfo}}
-<a class="btn btn-lg btn-primary" role="button" routerLink="encryptwallet" *ngIf="wallet">加密钱包</a>
+<span *ngIf="wallet">钱包地址：{{wallet?.address}} 私钥：{{wallet?.seed}} </span>
+<br>
+<button class="btn btn-primary" (click)="brainWallet()">确定</button>
+<button class="btn btn-primary" (click)="saveWallet()" *ngIf="wallet">保存</button>
+<br>
+<span>{{tipinfo}}</span>
+<a class="btn btn-lg btn-primary" role="button" routerLink="encryptwallet" *ngIf="isSave">加密钱包</a>
 <router-outlet></router-outlet>

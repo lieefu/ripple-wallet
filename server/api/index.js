@@ -26,7 +26,17 @@ router.get('/getwallets',(req,res)=>{
         return resultOk(res,addressarray);
     })
 })
-
+//////////////////////////////////////
+router.get("/brainwallet/:phrase", (req, res) => {
+    let phrase = req.params.phrase;
+    let wallet = {};
+    wallet = Ripple.createWalletFromPhrase(phrase);
+    wallet.ver = "1.0";
+    wallet.islocked = false;
+    req.session.wallet = wallet;
+    console.log(req.session, req.session.id);
+    resultOk(res, wallet);
+});
 //////////////////////////////////////
 router.get("/createwallet/:seed", (req, res) => {
     let seed = req.params.seed;
