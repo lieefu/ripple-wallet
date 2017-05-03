@@ -16,7 +16,7 @@ router.get('/getwallets',(req,res)=>{
         }
         let addressarray=[];
         files.forEach(function (filename) {
-            console.log(filename);
+            //console.log(filename);
             let pos = filename.indexOf(".key");
             if(pos>0){
                 filename=filename.substring(0,pos);
@@ -163,6 +163,16 @@ router.get("/accountinfo/:address", (req, res) => {
 router.get("/getbalances/:address", (req, res) => {
     var address = req.params.address;
     ripple('getBalances', address, {
+        limit: 100
+    }).then((info) => {
+        resultOk(res, info);
+    }).catch((error) => {
+        resultError(res, error);
+    })
+});
+router.get("/getTrustlines/:address", (req, res) => {
+    var address = req.params.address;
+    ripple('getTrustlines', address, {
         limit: 100
     }).then((info) => {
         resultOk(res, info);

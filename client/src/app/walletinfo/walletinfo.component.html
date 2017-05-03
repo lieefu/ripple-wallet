@@ -1,34 +1,16 @@
-<span *ngIf="!accountinfo">该钱包需要激活，激活方法：请人向该钱包地址{{gv.wallet.address}}发送30个XRP<span>
-    {{accountinfo?.xrpBalance}}
-<div class="card text-center" *ngIf="accountinfo">
+<div class="card text-center">
     <div class="card-header">
         <ul class="nav nav-tabs card-header-tabs">
             <li class="nav-item">
-                <a class="nav-link active" href="#">资金</a>
+                <a class="nav-link" routerLink="balance"  routerLinkActive="active">资金</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">交易历史</a>
+                <a class="nav-link" routerLink="history"  routerLinkActive="active">交易历史</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link disabled" href="#">联系人</a>
+                <a class="nav-link" routerLink="contacts"  routerLinkActive="active">联系人</a>
             </li>
         </ul>
     </div>
-    <div class="card-block">
-        <h4 class="card-title">Special title treatment</h4>
-        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-        <p>
-            <button type="button" class="btn btn-outline-primary" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" aria-controls="collapseExample">
-            Toggle
-          </button>
-        </p>
-        <div id="collapseExample" [ngbCollapse]="isCollapsed">
-            <div class="card">
-                <div class="card-block">
-                    You can collapse this card by clicking Toggle
-                </div>
-            </div>
-        </div>
-        <a href="#" class="btn btn-primary">Go somewhere</a>
-    </div>
+    <router-outlet></router-outlet>
 </div>

@@ -15,15 +15,17 @@ let mainWindow;
 function createWindow() {
     // Create the browser window.
     mainWindow = new BrowserWindow({
-        width: 800,
-        height: 600
+        //show: false,
+        width: 1024,
+        height: 768,
+        backgroundColor: '#2e2c29'
     });
 
     // and load the index.html of the app.
     mainWindow.loadURL('http://localhost:3000');
 
     // Open the DevTools.
-    mainWindow.webContents.openDevTools();
+    //mainWindow.webContents.openDevTools();
 
     // Emitted when the window is closed.
     mainWindow.on('closed', function() {
@@ -32,6 +34,9 @@ function createWindow() {
         // when you should delete the corresponding element.
         mainWindow = null;
     });
+    mainWindow.once('ready-to-show', () => {
+        mainWindow.show()
+    })
 }
 
 // This method will be called when Electron has finished

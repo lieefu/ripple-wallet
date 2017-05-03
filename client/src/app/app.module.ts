@@ -16,6 +16,11 @@ import { WalletComponent } from './wallet/wallet.component';
 import { CreatewalletComponent } from './createwallet/createwallet.component';
 import { WalletinfoComponent } from './walletinfo/walletinfo.component';
 import { DecryptwalletComponent } from './decryptwallet/decryptwallet.component';
+import { BalanceComponent } from './walletinfo/balance/balance.component';
+import { HistoryComponent } from './walletinfo/history/history.component';
+import { ContactsComponent } from './walletinfo/contacts/contacts.component';
+import { TrustlinesComponent } from './trustlines/trustlines.component';
+import { TrustlineComponent } from './trustlines/trustline/trustline.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +32,12 @@ import { DecryptwalletComponent } from './decryptwallet/decryptwallet.component'
     WalletComponent,
     CreatewalletComponent,
     WalletinfoComponent,
-    DecryptwalletComponent
+    DecryptwalletComponent,
+    BalanceComponent,
+    HistoryComponent,
+    ContactsComponent,
+    TrustlinesComponent,
+    TrustlineComponent
   ],
   imports: [
     BrowserModule,

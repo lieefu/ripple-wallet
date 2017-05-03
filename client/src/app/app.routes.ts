@@ -7,7 +7,10 @@ import { BrainwalletComponent}   from './brainwallet/brainwallet.component';
 import { SeedwalletCompoent} from './seedwallet/seedwallet.component';
 import { EncryptwalletComponent} from './encryptwallet/encryptwallet.component';
 import { DecryptwalletComponent} from './decryptwallet/decryptwallet.component';
-
+import { BalanceComponent } from './walletinfo/balance/balance.component';
+import { HistoryComponent } from './walletinfo/history/history.component';
+import { ContactsComponent } from './walletinfo/contacts/contacts.component';
+import { TrustlinesComponent} from './trustlines/trustlines.component';
 export const appRoutes = [
     {
         path:'',
@@ -18,7 +21,23 @@ export const appRoutes = [
         component:WalletComponent
     },{
         path:'walletinfo',
-        component:WalletinfoComponent
+        component:WalletinfoComponent,
+        children:[
+            {
+                path:'',
+                redirectTo: 'balance',
+                pathMatch: 'full'
+            },{
+                path:'balance',
+                component:BalanceComponent
+            },{
+                path:'history',
+                component:HistoryComponent
+            },{
+                path:'contacts',
+                component:ContactsComponent
+            }
+        ]
     },{
         path:'decryptwallet',
         component:DecryptwalletComponent
@@ -46,6 +65,9 @@ export const appRoutes = [
               ]
             }
         ]
+    },{
+        path:'trustlines',
+        component: TrustlinesComponent
     }
 
 ];

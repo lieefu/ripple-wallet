@@ -9,16 +9,6 @@ import { GlobalVariable } from '../global-variable';
     styleUrls: ['./walletinfo.component.css']
 })
 export class WalletinfoComponent implements OnInit {
-    isCollapsed:boolean=true;
-    accountinfo:any;
     constructor(private ripple: RippleService, private gv: GlobalVariable, private router: Router) { }
-    ngOnInit() {
-        this.ripple.accountinfo(this.gv.wallet.address).subscribe(result =>{
-            console.log(result);
-            if(result.ok){
-                this.accountinfo = result.data;
-            }
-        })
-    }
-
+    ngOnInit() {}
 }

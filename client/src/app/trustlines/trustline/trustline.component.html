@@ -1,0 +1,45 @@
+<div class="row">
+    <div class="col">
+        {{trustline.specification.currency}}
+    </div>
+    <div class="col-2">
+        余额
+    </div>
+    <div class="col-2">
+        限额
+    </div>
+    <div class="col-1">
+        Ripping
+    </div>
+    <div class="col-1">
+        冻结
+    </div>
+    <div class="col-1">
+        编辑
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <hr style="margin-top:0rem;margin-bottom:0rem">
+    </div>
+</div>
+<div class="row" style="color:gray;margin-bottom:1rem">
+    <div class="col">
+        {{trustline.specification.counterparty}}
+    </div>
+    <div class="col-2">
+        {{trustline.state.balance}}
+    </div>
+    <div class="col-2">
+        {{trustline.specification.limit}}
+    </div>
+    <div class="col-1">
+        {{trustline.specification.ripplingDisabled?"否":"是"}}
+    </div>
+    <div class="col-1">
+        {{trustline.specification.frozen?"是":"否"}}
+    </div>
+    <div class="col-1">
+        编辑
+    </div>
+</div>

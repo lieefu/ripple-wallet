@@ -35,6 +35,13 @@ export class RippleService {
     accountinfo(address){
         return this.httpget("api/accountinfo/"+address);
     }
+    getBalances(address){
+        return this.httpget("api/getbalances/"+address);
+    }
+    getTrustlines(address){
+        return this.httpget("api/getTrustlines/"+address);
+    }
+    //////////////////////////////
     private httpget(url){
         return this.http.get(url)
             .map(this.extractData)
