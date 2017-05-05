@@ -17,7 +17,7 @@ export class SeedwalletCompoent implements OnInit {
     ngOnInit() {
     }
     importWallet(){
-        this.tipinfo="";
+        this.tipinfo="正在验证私钥...........";
         this.isSave=false;
         this.router.navigate(['/createwallet/seedwallet']);
         this.ripple.importWallet(this.seed).subscribe(result => {

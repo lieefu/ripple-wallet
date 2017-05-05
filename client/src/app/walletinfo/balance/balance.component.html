@@ -1,9 +1,11 @@
-<div class="card-block">
-    <h4 class="card-title">{{title}}</h4>
-    <ul class="list-group">
-        <li class="list-group-item justify-content-between" *ngFor="let balance of gv.wallet.balances">
-            <div><span class="badge badge-info" style="font-size: 1.0rem">{{balance.currency}}</span><span style="font-size: 0.75rem">.{{balance.counterparty}}</span></div>
-            <span class="badge badge-default badge-pill" style="font-size: 1.0rem">{{balance.value|currency:balance.currency:true:'1.2-5'}}</span>
-        </li>
-    </ul>
+<div class="container">
+    <div class="card-block">
+        <h4 class="card-title">{{title}}</h4>
+        <ul class="list-group">
+            <li class="list-group-item justify-content-between" *ngFor="let balance of gv.wallet.balances">
+                <div><span class="badge badge-info" style="font-size: 1.0rem">{{balance.currency}}</span><span style="font-size: 0.75rem">.{{balance.counterparty}}</span></div>
+                <span class="badge badge-default badge-pill" style="font-size: 1.0rem">{{balance.value|currency:balance.currency:true:'1.2-5'}}</span>
+            </li>
+        </ul>
+    </div>
 </div>

@@ -6,16 +6,15 @@
         余额
     </div>
     <div class="col-2">
-        限额
+        信任额度
     </div>
-    <div class="col-1">
-        Ripping
+    <div class="col-2">
+        禁止兑换
     </div>
     <div class="col-1">
         冻结
     </div>
     <div class="col-1">
-        编辑
     </div>
 </div>
 <div class="row">
@@ -33,13 +32,36 @@
     <div class="col-2">
         {{trustline.specification.limit}}
     </div>
-    <div class="col-1">
-        {{trustline.specification.ripplingDisabled?"否":"是"}}
+    <div class="col-2">
+        {{trustline.specification.ripplingDisabled?"是":"否"}}
     </div>
     <div class="col-1">
         {{trustline.specification.frozen?"是":"否"}}
     </div>
     <div class="col-1">
-        编辑
+        <span class="badge badge-default" style="cursor:pointer" (click)="showedit=!showedit">编辑</span>
     </div>
+</div>
+<div class="row" style="color:gray;margin-bottom:1rem" *ngIf="showedit">
+    <div class="col-3">
+    </div>
+    <div class="col">
+        <label class="mr-sm-2" for="limit">信任额度：</label>
+        <input type="text" class="custom-control  mb-2 mr-sm-2 mb-sm-0" id="limit" [(ngModel)]="limit">
+        <label class="custom-control custom-checkbox mb-2 mr-sm-2 mb-sm-0">
+              <input type="checkbox" class="custom-control-input" [(ngModel)]="ripplingDisabled">
+              <span class="custom-control-indicator"></span>
+              <span class="custom-control-description">禁止同币种兑换</span>
+            </label>
+        <label class="custom-control custom-checkbox mb-2 mr-sm-2 mb-sm-0">
+            <input type="checkbox" class="custom-control-input" [(ngModel)]="frozen">
+            <span class="custom-control-indicator"></span>
+            <span class="custom-control-description">冻结</span>
+          </label>
+        <button class="btn btn-primary btn-sm" (click)="save()">确  定</button>
+        <button class="btn btn-danger btn-sm">删除</button>
+        <span class="badge badge-info" style="cursor:pointer" (click)="showedit=false">取消</span>
+
+    </div>
+
 </div>
