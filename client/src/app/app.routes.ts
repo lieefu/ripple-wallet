@@ -11,6 +11,7 @@ import { BalanceComponent } from './walletinfo/balance/balance.component';
 import { HistoryComponent } from './walletinfo/history/history.component';
 import { ContactsComponent } from './walletinfo/contacts/contacts.component';
 import { TrustlinesComponent} from './trustlines/trustlines.component';
+import { SendComponent} from './send/send.component';
 export const appRoutes = [
     {
         path:'',
@@ -19,6 +20,9 @@ export const appRoutes = [
     },{
         path:'wallet',
         component:WalletComponent
+    },{
+        path:'send',
+        component:SendComponent
     },{
         path:'walletinfo',
         component:WalletinfoComponent,

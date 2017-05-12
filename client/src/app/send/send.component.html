@@ -1,0 +1,22 @@
+<div class="container">
+    <div class="form-group">
+        <label for="recipient_label">接收方钱包地址</label>
+        <input type="text" class="form-control" id="recipient_label" [(ngModel)]="recipient_label" placeholder="输入钱包地址或者联系人名字" (focusout)="resolveRecipient();">
+    </div>
+    <br>
+    <span>{{tipinfo}}</span>
+    <div class="form-group row" *ngIf="isShowAmount">
+        <div class="col-3">
+            <input class="form-control" type="text"  id="example-text-input" placeholder="输入发送数量">
+        </div>
+        <div class="col">
+            <div ngbDropdown class="d-inline-block">
+                <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>{{currency_label}}</button>
+                <div class="dropdown-menu" aria-labelledby="dropdownBasic1">
+                    <button class="dropdown-item" (click)="setCurrencyLabel('XRP','XRP- Ripples')">XRP - Ripples</button>
+                    <button class="dropdown-item" *ngFor="let currency of currencies" (click)="setCurrencyLabel(currency);">{{currency.name}}.{{currency.issuer}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

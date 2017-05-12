@@ -3,6 +3,9 @@ var path = require('path');
 const express=require("express");
 const session = require('express-session');
 const app = express();
+var bodyParser = require('body-parser');
+app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.use(session({
   secret: 'ripplewalletbuildbylieefu', // 建议使用 128 个字符的随机字符串
   resave: false,

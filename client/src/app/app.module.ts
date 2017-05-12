@@ -21,6 +21,7 @@ import { HistoryComponent } from './walletinfo/history/history.component';
 import { ContactsComponent } from './walletinfo/contacts/contacts.component';
 import { TrustlinesComponent } from './trustlines/trustlines.component';
 import { TrustlineComponent } from './trustlines/trustline/trustline.component';
+import { SendComponent } from './send/send.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { TrustlineComponent } from './trustlines/trustline/trustline.component';
     HistoryComponent,
     ContactsComponent,
     TrustlinesComponent,
-    TrustlineComponent
+    TrustlineComponent,
+    SendComponent
   ],
   imports: [
     BrowserModule,

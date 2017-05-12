@@ -9,33 +9,34 @@ router.get('/', (req, res) => {
     resultOk(res, 'api works,ok');
 });
 //////////////////////////////////////
-router.get('/getwallets',(req,res)=>{
-    fs.readdir(config.dataPath,(err,files)=>{
-        if(err){
-            return resultError(res,"搜索钱包文件遇到错误");
+router.get('/getwallets', (req, res) => {
+    fs.readdir(config.dataPath, (err, files) => {
+        if (err) {
+            return resultError(res, "搜索钱包文件遇到错误");
         }
-        let addressarray=[];
-        files.forEach(function (filename) {
+        let addressarray = [];
+        files.forEach(function(filename) {
             //console.log(filename);
             let pos = filename.indexOf(".key");
-            if(pos>0){
-                filename=filename.substring(0,pos);
+            if (pos > 0) {
+                filename = filename.substring(0, pos);
                 addressarray.push(filename);
             }
         });
-        return resultOk(res,addressarray);
+        return resultOk(res, addressarray);
     })
 })
 ///////////////////////////////////////
-router.get("/getwallet/:address",(req,res)=>{
-    let address= req.params.address;
-    let wallet={};
+router.get("/getwallet/:address", (req, res) => {
+    let address = req.params.address;
+    let wallet = {};
     let filename = config.dataPath + address + ".key";
-    fs.readFile(filename, "utf-8",(err, data) => {
+    fs.readFile(filename, "utf-8", (err, data) => {
         if (err) {
             return resultError(res, "钱包文件不存在");
         }
         let wallet = JSON.parse(data);
+        req.session.wallet = wallet;
         return resultOk(res, wallet);
     });
 });
@@ -93,25 +94,26 @@ router.get('/savewallet', (req, res) => {
 
 })
 ///////////////////////////////
-router.get('/decryptwallet/:address/:password',(req,res)=>{
+router.get('/decryptwallet/:address/:password', (req, res) => {
     let address = req.params.address;
     let password = req.params.password;
     let filename = config.dataPath + address + ".key";
-    fs.readFile(filename, "utf-8",(err, data) => {
+    fs.readFile(filename, "utf-8", (err, data) => {
         if (err) {
             return resultError(res, "钱包文件不存在");
         }
         let wallet = JSON.parse(data);
-        if(wallet.isSecreted){
+        if (wallet.isSecreted) {
             console.log("解密钱包");
-            try{
-                wallet.seed = Ripple.decryptSeed(wallet.secret,password);
+            try {
+                wallet.seed = Ripple.decryptSeed(wallet.secret, password);
                 //wallet.msg = "解密好了，哈";
                 wallet.isLocked = false;
                 wallet.isSecreted = true;
+                req.session.wallet = wallet;
                 return resultOk(res, wallet);
-            }catch(err){
-                return resultError(res,"密码错误");
+            } catch (err) {
+                return resultError(res, "密码错误");
             }
         }
         return resultError(res, "钱包文件格式错误");
@@ -122,27 +124,28 @@ router.get('/encryptwallet/:address/:password', (req, res) => {
     let address = req.params.address;
     let password = req.params.password;
     let filename = config.dataPath + address + ".key";
-    fs.readFile(filename, "utf-8",(err, data) => {
+    fs.readFile(filename, "utf-8", (err, data) => {
         if (err) {
             return resultError(res, "钱包文件不存在");
         }
         let wallet = JSON.parse(data);
         console.log(wallet);
-        if(wallet.isSecreted){
+        if (wallet.isSecreted) {
             return resultError(res, "钱包已经被加密过了，不能重复加密！");
         }
         if (wallet.isSecreted == false) {
             console.log("加密钱包");
             //wallet.msg = "加密好了，哈";
-            wallet.secret = Ripple.encryptSeed(wallet.seed,password);
+            wallet.secret = Ripple.encryptSeed(wallet.seed, password);
             wallet.seed = "";
-            wallet.isSecreted = true;//加密保护了
-            wallet.isLocked = true;//锁定了
+            wallet.isSecreted = true; //加密保护了
+            wallet.isLocked = true; //锁定了
             //return resultOk(res, wallet);
             fs.writeFile(filename, JSON.stringify(wallet), function(err) {
                 if (err) {
                     return resultError(res, "钱包加密保存文件失败！" + err);
                 }
+                req.session.wallet = wallet;
                 return resultOk(res, wallet);
             });
             return;
@@ -175,6 +178,7 @@ router.get("/getTrustlines/:address", (req, res) => {
     ripple('getTrustlines', address, {
         limit: 100
     }).then((info) => {
+        console.log(info);
         resultOk(res, info);
     }).catch((error) => {
         resultError(res, error);
@@ -195,8 +199,96 @@ router.get("/serverinfo", (req, res) => {
         resultError(res, error);
     })
 })
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+router.post("/payment/:from/:to", (req, res) => {
+    const from = req.params.from;
+    const address = from;
+    const to = req.params.to;
+    const amount = req.body.amount;
+    const wallet = req.session.wallet;
+    //console.log("wallet:",wallet);
+    if (!wallet || wallet.isLocked) {
+        return resultError(res, "钱包未解锁");
+    }
+    const payment = {
+        "source": {
+            "address": from,
+            "maxAmount": amount
+        },
+        "destination": {
+            "address": to,
+            "amount": amount
+        }
+    };
+    ripple('preparePayment', address, payment, Ripple.instructions).then(prepare => {
+        console.log(prepare);
+        if (prepare.txJSON) {
+            const txJSON = prepare.txJSON;
+            const secret = wallet.seed;
+            //console.log(txJSON,secret);
+            Ripple.submit(txJSON, secret).then(result => {
+                resultOk(res, result);
+            }).catch(error => {
+                resultError(res, error);
+            })
+        } else {
+            resultError(res, "preparePayment error!不该发生的错误");
+        }
+    }).catch((error) => {
+        resultError(res, {
+            resultCode: "libError",
+            resultMessage: "preparePayment error:" + error
+        });
+    });
+})
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+router.post("/setTrustline/:address", (req, res) => {
+    var address = req.params.address;
+    var trust = req.body.trust;
+    const wallet = req.session.wallet;
+    //console.log("wallet:",wallet);
+    if (!wallet || wallet.isLocked) {
+        return resultError(res, "钱包未解锁");
+    }
+    const trustline = {
+        "currency": trust.currency,
+        "counterparty": trust.counterparty,
+        "limit": trust.limit,
+        //"qualityIn": 1, //"qualityOut": 1,
+        "ripplingDisabled": trust.ripplingDisabled,
+        "frozen": trust.frozen,
+        "memos": [{
+            "type": "rippleok",
+            "format": "plain/text",
+            "data": "Lieefu's ripple wallet, lieefu.com"
+        }]
+    };
+    ripple('prepareTrustline', address, trustline, Ripple.instructions).then(prepare => {
+        console.log(prepare);
+        if (prepare.txJSON) {
+            const txJSON = prepare.txJSON;
+            const secret = wallet.seed;
+            //console.log(txJSON,secret);
+            Ripple.submit(txJSON, secret).then(result => {
+                resultOk(res, result);
+            }).catch(error => {
+                resultError(res, error);
+            })
+        } else {
+            resultError(res, "preparePayment error!不该发生的错误");
+        }
+    }).catch((error) => {
+        console.log("error trustline");
+        resultError(res, {
+            resultCode: "libError",
+            resultMessage: "prepareTrustline error:" + error
+        });
+    });
+})
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function resultOk(res, data) {
+    res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+    //Prevent Getting Json Response from Cache in Express JS
     res.status(200).json({
         ok: true,
         data: data
@@ -204,6 +296,8 @@ function resultOk(res, data) {
 }
 
 function resultError(res, data) {
+    res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+    //Prevent Getting Json Response from Cache in Express JS
     res.status(200).json({
         ok: false,
         data: data

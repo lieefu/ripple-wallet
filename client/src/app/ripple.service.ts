@@ -8,42 +8,51 @@ export class RippleService {
     constructor(private http: Http) { }
     ///////////////////////
     getWallet(address):Observable<any>{
-        return this.httpget('api/getwallet/'+address);
+        return this.httpGet('api/getwallet/'+address);
     }
     getWallets():Observable<any> {
-        return this.httpget('api/getwallets');
+        return this.httpGet('api/getwallets');
     }
     brainWallet(phrase): Observable<any> {
-        return this.httpget('api/brainwallet/'+phrase);
+        return this.httpGet('api/brainwallet/'+phrase);
     }
     newWallet(): Observable<any> {
-        return this.httpget('api/newwallet');
+        return this.httpGet('api/newwallet');
     }
     importWallet(seed): Observable<any> {
-        return this.httpget('api/importwallet/'+seed);
+        return this.httpGet('api/importwallet/'+seed);
     }
     saveWallet():Observable<any>{
-        return this.httpget('api/savewallet');
+        return this.httpGet('api/savewallet');
     }
     encryptWallet(address,password){
-        return this.httpget('api/encryptwallet/'+address+"/"+password);
+        return this.httpGet('api/encryptwallet/'+address+"/"+password);
     }
     decryptWallet(address,password){
-        return this.httpget('api/decryptwallet/'+address+"/"+password);
+        return this.httpGet('api/decryptwallet/'+address+"/"+password);
     }
     //////////////////////////////////
     accountinfo(address){
-        return this.httpget("api/accountinfo/"+address);
+        return this.httpGet("api/accountinfo/"+address);
     }
     getBalances(address){
-        return this.httpget("api/getbalances/"+address);
+        return this.httpGet("api/getbalances/"+address);
     }
     getTrustlines(address){
-        return this.httpget("api/getTrustlines/"+address);
+        return this.httpGet("api/getTrustlines/"+address);
+    }
+    ///////////////////////////
+    setTrustline(address,trust){
+        return this.httpPost("api/setTrustline/"+address,{trust:trust});
     }
     //////////////////////////////
-    private httpget(url){
+    private httpGet(url){
         return this.http.get(url)
+            .map(this.extractData)
+            .catch(this.handleError);
+    }
+    private httpPost(url,data){
+        return this.http.post(url,data)
             .map(this.extractData)
             .catch(this.handleError);
     }

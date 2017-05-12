@@ -5,7 +5,7 @@ const {
 const keypairs = require('ripple-keypairs');
 const crypto = require('crypto');
 const rippleApi = new RippleAPI({
-    server: 'wss://s1.ripple.com' // Public rippled server hosted by Ripple, Inc.
+    server: 'wss://s-west.ripple.com' // Public rippled server hosted by Ripple, Inc.
 });
 rippleApi.on('error', (errorCode, errorMessage) => {
     console.log(errorCode + ': ' + errorMessage);
@@ -18,27 +18,50 @@ rippleApi.on('disconnected', (code) => {
     // will be 1000 if this was normal closure
     console.log('disconnected, code:', code);
 });
-
-module.exports = {
-    ripple: function(fname, ...args) {
-        return new Promise(function(resolve, reject) {
-            if (rippleApi.isConnected()) {
-                invokeRipple(resolve, reject, fname, ...args);
-            } else {
-                rippleApi.connect().then(() => {
-                    invokeRipple(resolve, reject, fname, ...args);
-                }).catch(reject);
-            }
-        })
-    },
-    createWallet,
-    createWalletFromSeed,
-    createWalletFromPhrase,
-    encryptSeed,
-    decryptSeed
-}
+const instructions = {
+    maxLedgerVersionOffset: 10
+};
 ///////////////////////////
-function invokeRipple(resolve, reject, fname, ...args) {
+function submit(txJSON, secret) {
+    return new Promise((resolve, reject) => {
+        try {
+            const signed = rippleApi.sign(txJSON, secret);
+            const txid = signed.id;
+            const signedTransaction = signed.signedTransaction;
+            rippleApi.submit(signedTransaction).then(result => {
+                if (result.resultCode == "tesSUCCESS") {
+                    resolve(result);
+                } else {
+                    reject(result);
+                }
+            }).catch(error => {
+                reject({
+                    resultCode: "libError",
+                    resultMessage: "submit error:" + error
+                });
+            });
+        } catch (error) {
+            reject({
+                resultCode: "libError",
+                resultMessage: "sign error:" + error
+            });
+        }
+    });
+}
+
+function invokeRipple(fname, ...args) {
+    return new Promise(function(resolve, reject) {
+        if (rippleApi.isConnected()) {
+            invoke_ripple(resolve, reject, fname, ...args);
+        } else {
+            rippleApi.connect().then(() => {
+                invoke_ripple(resolve, reject, fname, ...args);
+            }).catch(reject);
+        }
+    })
+}
+
+function invoke_ripple(resolve, reject, fname, ...args) {
     try {
         if (rippleApi[fname]) {
             rippleApi[fname](...args).then((data) => {
@@ -96,10 +119,21 @@ function encryptSeed(seed, password) {
 
 function decryptSeed(data, password) {
     const crypto = require('crypto');
-    const decipher = crypto.createDecipher('aes192',password);
+    const decipher = crypto.createDecipher('aes192', password);
     const encrypted = data;
     let decrypted = decipher.update(encrypted, 'hex', 'utf8');
     decrypted += decipher.final('utf8');
     console.log(decrypted);
     return decrypted;
+}
+//-------------------------------------------------------------------------------------------------------
+module.exports = {
+    ripple: invokeRipple,
+    instructions,
+    createWallet,
+    createWalletFromSeed,
+    createWalletFromPhrase,
+    encryptSeed,
+    decryptSeed,
+    submit
 }
