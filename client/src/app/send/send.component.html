@@ -6,17 +6,20 @@
     <br>
     <span>{{tipinfo}}</span>
     <div class="form-group row" *ngIf="isShowAmount">
-        <div class="col-3">
-            <input class="form-control" type="text"  id="example-text-input" placeholder="输入发送数量">
+        <div class="col-2">
+            <input class="form-control" type="text"  id="amount-value" [(ngModel)]="amount_value" (focusout)="findPaths(amount_value)" placeholder="输入发送数量">
         </div>
-        <div class="col">
+        <div class="col-3">
             <div ngbDropdown class="d-inline-block">
-                <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>{{currency_label}}</button>
-                <div class="dropdown-menu" aria-labelledby="dropdownBasic1">
+                <button class="btn btn-outline-info" id="dropdownCurrency" ngbDropdownToggle>{{currency_label}}</button>
+                <div class="dropdown-menu" aria-labelledby="dropdownCurrency">
                     <button class="dropdown-item" (click)="setCurrencyLabel('XRP','XRP- Ripples')">XRP - Ripples</button>
                     <button class="dropdown-item" *ngFor="let currency of currencies" (click)="setCurrencyLabel(currency);">{{currency.name}}.{{currency.issuer}}</button>
                 </div>
             </div>
+        </div>
+        <div class="col-1">
+            <button type="button" class="btn btn-primary" *ngIf="isShowSendXRPbtn">Send XRP</button>
         </div>
     </div>
 </div>

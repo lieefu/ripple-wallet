@@ -12,20 +12,24 @@ export class SendComponent implements OnInit {
     tipinfo: string;
     recipient_label: string;
     currency_label: string = "XRP- Ripples";
-    Amount:object={
-        currency: "XRP"
+    Amount: any = {
+        currency: "XRP",
+        value: 0
     };
+    destination_address: string;
+    amount_value: number;
     currencies = [];
-    isShowAmount:boolean=false;
+    isShowAmount: boolean = false;
+    isShowSendXRPbtn: boolean = false;
     constructor(private ripple: RippleService, private gv: GlobalVariable, private router: Router) { }
 
     ngOnInit() {
     }
     resolveRecipient() {
         console.log(this.recipient_label);
-        const address = this.recipient_label;
+        this.destination_address = this.recipient_label;
         this.isShowAmount = false;
-        this.ripple.getTrustlines(address).subscribe(result => {
+        this.ripple.getTrustlines(this.destination_address).subscribe(result => {
             if (result.ok) {
                 console.log(result);
                 const trustlines = result.data;
@@ -60,10 +64,34 @@ export class SendComponent implements OnInit {
         } else {
             this.currency_label = currency.name + "." + currency.issuer;
             this.Amount = {
-                currency:  currency.name,
+                currency: currency.name,
                 counterparty: currency.issuer
             }
         }
-        console.log(this.Amount);
+        this.findPaths(this.amount_value);
+    }
+    findPaths(value) {
+        if (value && value > 0) {
+            console.log(value);
+            this.Amount.value = value;
+            this.isShowSendXRPbtn = this.Amount.currency=="XRP";
+            console.log(this.Amount);
+            var pathfind = {
+                "source": {
+                    "address": this.gv.wallet.address
+                },
+                "destination": {
+                    "address": this.destination_address,
+                    "amount": this.Amount
+                }
+            };
+            console.log(pathfind);
+            this.ripple.getPaths(pathfind).subscribe(result =>{
+                console.log(result);
+            })
+        } else {
+            console.log("输入value");
+        }
+
     }
 }

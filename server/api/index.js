@@ -284,7 +284,15 @@ router.post("/setTrustline/:address", (req, res) => {
             resultMessage: "prepareTrustline error:" + error
         });
     });
-})
+});
+router.post('/getPaths',(req,res) =>{
+    const pathfind = req.body.pathfind;
+    ripple('getPaths',pathfind).then(paths=>{
+        resultOk(res,paths);
+    }).catch(error =>{
+        resultError(res,error);
+    })
+});
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function resultOk(res, data) {
     res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');

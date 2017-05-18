@@ -45,6 +45,9 @@ export class RippleService {
     setTrustline(address,trust){
         return this.httpPost("api/setTrustline/"+address,{trust:trust});
     }
+    getPaths(pathfind){
+        return this.httpPost('api/getPaths',{pathfind:pathfind});
+    }
     //////////////////////////////
     private httpGet(url){
         return this.http.get(url)
