@@ -10,6 +10,7 @@ import { GlobalVariable } from '../global-variable';
 })
 export class SendComponent implements OnInit {
     tipinfo: string;
+    tipinfo_path:string;
     recipient_label: string;
     currency_label: string = "XRP- Ripples";
     Amount: any = {
@@ -18,9 +19,14 @@ export class SendComponent implements OnInit {
     };
     destination_address: string;
     amount_value: number;
+    pathfind: any;
     currencies = [];
+    paths = [];
+    payment: any;
     isShowAmount: boolean = false;
     isShowSendXRPbtn: boolean = false;
+    isShowPaths: boolean = false;
+    timer;
     constructor(private ripple: RippleService, private gv: GlobalVariable, private router: Router) { }
 
     ngOnInit() {
@@ -49,12 +55,16 @@ export class SendComponent implements OnInit {
                     this.currencies = [];
                     this.isShowAmount = true;
                 } else {
-                    this.tipinfo = "钱包地址格式错误。";
+                    if (result.data.name == "TimeoutError") {
+                        this.tipinfo = "超时错误，请稍后再试！";
+                    } else {
+                        this.tipinfo = "钱包地址格式错误。";
+                    }
                 };
             }
         });
     }
-    setCurrencyLabel(currency, label) {
+    setCurrency(currency, label) {
         console.log(currency);
         if (label) {
             this.Amount = {
@@ -68,15 +78,14 @@ export class SendComponent implements OnInit {
                 counterparty: currency.issuer
             }
         }
-        this.findPaths(this.amount_value);
+        this.setValue(this.amount_value);
     }
-    findPaths(value) {
+    setValue(value) {
         if (value && value > 0) {
-            console.log(value);
-            this.Amount.value = value;
-            this.isShowSendXRPbtn = this.Amount.currency=="XRP";
-            console.log(this.Amount);
-            var pathfind = {
+            this.paths = [];
+            this.isShowSendXRPbtn = (this.Amount.currency == "XRP");
+            this.Amount.value = (value);
+            this.pathfind = {
                 "source": {
                     "address": this.gv.wallet.address
                 },
@@ -85,13 +94,53 @@ export class SendComponent implements OnInit {
                     "amount": this.Amount
                 }
             };
-            console.log(pathfind);
-            this.ripple.getPaths(pathfind).subscribe(result =>{
-                console.log(result);
-            })
+            this.tipinfo = ` 转账资产：“${this.Amount.value}${this.Amount.currency}” 接收方地址：“${this.destination_address}” `;
+            this.findPaths();
         } else {
-            console.log("输入value");
+            this.tipinfo = "请输入发送数量";
         }
-
+    }
+    findPaths() {
+        console.log("find paths", this.pathfind);
+        if (!this.timer) this.timer = setInterval(() => { this.findPaths(); }, 10000);
+        if (this.router.url !== "/send") {
+            console.log("clear timer find paths", this.router.url, !this.timer);
+            clearInterval(this.timer);
+            this.timer = null;
+        }
+        this.ripple.getPaths(this.pathfind).subscribe(result => {
+            //console.log(result);
+            if (result.ok) {
+                this.paths = result.data;
+                this.isShowPaths = true;
+                this.tipinfo_path = `点击上面按钮，将发送按钮上标注的资产，接收方：${this.destination_address} 收到：${this.Amount.value}${this.Amount.currency}`;
+            } else {
+                this.paths = [];
+                this.isShowPaths = false;
+                this.tipinfo_path = "";
+            }
+        })
+    }
+    sendXRP(value) {
+        console.log("send", value, "XRP");
+        this.payment = {
+            "source": {
+                "address": this.gv.wallet.address,
+                "maxAmount": this.pathfind.destination.amount
+            },
+            "destination": this.pathfind.destination
+        };
+        this.sendPayment(this.payment);
+    }
+    sendIOU(path) {
+        console.log("send", path);
+        this.payment = path;
+        this.sendPayment(this.payment);
+    }
+    sendPayment(payment) {
+        console.log("payment:", payment);
+        this.ripple.sendPayment(payment).subscribe(result =>{
+            console.log(result);
+        })
     }
 }

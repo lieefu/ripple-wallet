@@ -1,25 +1,41 @@
 <div class="container">
     <div class="form-group">
-        <label for="recipient_label">接收方钱包地址</label>
+        <label for="recipient_label">接收方：</label>
         <input type="text" class="form-control" id="recipient_label" [(ngModel)]="recipient_label" placeholder="输入钱包地址或者联系人名字" (focusout)="resolveRecipient();">
     </div>
     <br>
-    <span>{{tipinfo}}</span>
-    <div class="form-group row" *ngIf="isShowAmount">
-        <div class="col-2">
-            <input class="form-control" type="text"  id="amount-value" [(ngModel)]="amount_value" (focusout)="findPaths(amount_value)" placeholder="输入发送数量">
-        </div>
-        <div class="col-3">
-            <div ngbDropdown class="d-inline-block">
-                <button class="btn btn-outline-info" id="dropdownCurrency" ngbDropdownToggle>{{currency_label}}</button>
-                <div class="dropdown-menu" aria-labelledby="dropdownCurrency">
-                    <button class="dropdown-item" (click)="setCurrencyLabel('XRP','XRP- Ripples')">XRP - Ripples</button>
-                    <button class="dropdown-item" *ngFor="let currency of currencies" (click)="setCurrencyLabel(currency);">{{currency.name}}.{{currency.issuer}}</button>
+    <div class="form-group" *ngIf="isShowAmount">
+        <div class="form-group row">
+            <div class="col-2">
+                <input class="form-control" type="text" id="amount-value" [(ngModel)]="amount_value" (focusout)="setValue(amount_value)" placeholder="输入发送数量">
+            </div>
+            <div class="col-3">
+                <div ngbDropdown class="d-inline-block">
+                    <button class="btn btn-outline-info" id="dropdownCurrency" ngbDropdownToggle>{{currency_label}}</button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownCurrency">
+                        <button class="dropdown-item" (click)="setCurrency('XRP','XRP- Ripples')">XRP - Ripples</button>
+                        <button class="dropdown-item" *ngFor="let currency of currencies" (click)="setCurrency(currency);">{{currency.name}}.{{currency.issuer}}</button>
+                    </div>
                 </div>
             </div>
+            <div class="col-1">
+                <button type="button" class="btn btn-primary" *ngIf="isShowSendXRPbtn" (click)="sendXRP(amount_value)">Send XRP</button>
+            </div>
         </div>
-        <div class="col-1">
-            <button type="button" class="btn btn-primary" *ngIf="isShowSendXRPbtn">Send XRP</button>
+        <div class="form-group row" *ngIf="tipinfo">
+            <div class="col">
+                {{tipinfo}}
+            </div>
+        </div>
+        <div class="form-group row" *ngIf="isShowPaths">
+            <div class="col">
+                <button type="button" class="btn btn-outline-primary"   *ngFor="let path of paths" style="cursor:pointer" (click)="sendIOU(path)">{{path.source.maxAmount.value}}<b>{{path.source.maxAmount.currency}}</b></button>
+            </div>
+        </div>
+        <div class="form-group row" *ngIf="tipinfo_path">
+            <div class="col">
+                {{tipinfo_path}}
+            </div>
         </div>
     </div>
 </div>

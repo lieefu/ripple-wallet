@@ -48,6 +48,9 @@ export class RippleService {
     getPaths(pathfind){
         return this.httpPost('api/getPaths',{pathfind:pathfind});
     }
+    sendPayment(payment){
+        return this.httpPost('api/payment',{payment:payment});
+    }
     //////////////////////////////
     private httpGet(url){
         return this.http.get(url)

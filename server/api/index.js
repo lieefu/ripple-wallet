@@ -200,26 +200,14 @@ router.get("/serverinfo", (req, res) => {
     })
 })
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-router.post("/payment/:from/:to", (req, res) => {
-    const from = req.params.from;
-    const address = from;
-    const to = req.params.to;
-    const amount = req.body.amount;
+router.post("/payment", (req, res) => {
+    const payment = req.body.payment;
+    const address = payment.source.address;
     const wallet = req.session.wallet;
     //console.log("wallet:",wallet);
     if (!wallet || wallet.isLocked) {
         return resultError(res, "钱包未解锁");
     }
-    const payment = {
-        "source": {
-            "address": from,
-            "maxAmount": amount
-        },
-        "destination": {
-            "address": to,
-            "amount": amount
-        }
-    };
     ripple('preparePayment', address, payment, Ripple.instructions).then(prepare => {
         console.log(prepare);
         if (prepare.txJSON) {
