@@ -1,0 +1,12 @@
+<div class="container">
+    <div class="form-group">
+        <label for="recipient_label">提现/支付 地址：</label>
+        <input type="text" class="form-control" id="recipient_label" [(ngModel)]="recipient_label" placeholder="提现/支付 接收方地址" (focusout)="resolveRecipient();">
+    </div>
+    <div class="form-group" *ngFor="let field of extra_fields">
+    <label for="{{field.name}}">{{field.label}}</label>
+    <input [type]="field.type" class="form-control" [id]="field.name" [attr.aria-describedby]="field.name+'Help'" [(ngModel)]="field.value">
+    <small [id]="field.name+'Help'" class="form-text text-muted">{{field.hint}}</small>
+  </div>
+  <button type="submit" class="btn btn-primary" (click)="send()">Submit</button>
+</div>

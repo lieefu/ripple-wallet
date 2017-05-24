@@ -12,6 +12,9 @@ import { HistoryComponent } from './walletinfo/history/history.component';
 import { ContactsComponent } from './walletinfo/contacts/contacts.component';
 import { TrustlinesComponent} from './trustlines/trustlines.component';
 import { SendComponent} from './send/send.component';
+import { WithdrawComponent} from './withdraw/withdraw.component';
+import { DepositComponent} from './deposit/deposit.component';
+import { TradeComponent} from './trade/trade.component';
 export const appRoutes = [
     {
         path:'',
@@ -23,6 +26,15 @@ export const appRoutes = [
     },{
         path:'send',
         component:SendComponent
+    },{
+        path:'withdraw',
+        component:WithdrawComponent
+    },{
+        path:'deposit',
+        component:DepositComponent
+    },{
+        path:'trade',
+        component:TradeComponent
     },{
         path:'walletinfo',
         component:WalletinfoComponent,
