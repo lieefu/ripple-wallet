@@ -155,6 +155,17 @@ router.get('/encryptwallet/:address/:password', (req, res) => {
 
 })
 //////////////////////////////////////
+router.post("/getOrderbook/:address/:limit",(req,res) =>{
+    let address = req.params.address;
+    let limit =  +req.params.limit;
+    let  orderbook = req.body.orderbook;
+    console.log(address,orderbook,{limit:limit});
+    ripple("getOrderbook",address,orderbook,{limit:limit}).then(info=>{
+        resultOk(res,info);
+    }).catch(error =>{
+        resultError(res,error);
+    })
+})
 router.get("/accountinfo/:address", (req, res) => {
     var address = req.params.address;
     ripple('getAccountInfo', address).then((info) => {

@@ -4,9 +4,25 @@
         <input type="text" class="form-control" id="recipient_label" [(ngModel)]="recipient_label" placeholder="提现/支付 接收方地址" (focusout)="resolveRecipient();">
     </div>
     <div class="form-group" *ngFor="let field of extra_fields">
-    <label for="{{field.name}}">{{field.label}}</label>
-    <input [type]="field.type" class="form-control" [id]="field.name" [attr.aria-describedby]="field.name+'Help'" [(ngModel)]="field.value">
-    <small [id]="field.name+'Help'" class="form-text text-muted">{{field.hint}}</small>
-  </div>
-  <button type="submit" class="btn btn-primary" (click)="send()">Submit</button>
+        <label for="{{field.name}}">{{field.label}}</label>
+        <input [type]="field.type" class="form-control" [id]="field.name" [attr.aria-describedby]="field.name+'Help'" [(ngModel)]="field.value">
+        <small [id]="field.name+'Help'" class="form-text text-muted">{{field.hint}}</small>
+    </div>
+    <div class="form-inline" *ngIf="extra_fields.length>0">
+        <label class="sr-only" for="inlineFormInputGroup">value</label>
+        <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+            <input type="text" class="form-control" id="inlineFormInputGroup" [(ngModel)]="withdraw_value" (focusout)="setWithdrawValue(withdraw_value)" placeholder="提现数额">
+            <div class="input-group-addon">{{Amount.currency}}</div>
+        </div>
+    </div>
+    <div class="form-group row" *ngIf="isShowPaths">
+        <div class="col">
+            <button type="button" class="btn btn-outline-primary"   *ngFor="let path of paths" style="cursor:pointer" (click)="withDraw(path)">{{path.source.maxAmount.value}}<b>{{path.source.maxAmount.currency}}</b></button>
+        </div>
+    </div>
+    <div class="form-group row" *ngIf="isShowPaths">
+        <div class="col">
+            {{tipinfo_path}}
+        </div>
+    </div>
 </div>

@@ -41,6 +41,9 @@ export class RippleService {
     getTrustlines(address) {
         return this.httpGet("api/getTrustlines/" + address);
     }
+    getOrderbook(address,orderbook,limit){
+        return this.httpPost("api/getOrderbook/"+address+"/"+limit,{orderbook:orderbook});
+    }
     ///////////////////////////
     setTrustline(address, trust) {
         return this.httpPost("api/setTrustline/" + address, { trust: trust });
@@ -53,11 +56,9 @@ export class RippleService {
     }
     gateways={
         ripplefox:{
-            domain:"ripplefox.com",
             federation_url:"https://ripplefox.com/bridge"
         },
         ripplechina:{
-            domain:"iripplechina.com",
             federation_url:"https://ripple.iripplechina.com/bridge"
         }
     };
@@ -68,13 +69,6 @@ export class RippleService {
             console.log(key,data[key]);
             params.set(key,data[key]);
         }
-          params.set('domain', gateway.domain);
-        // params.set('destination', '13901062731/a');
-        // params.set('domain', gateway.domain);
-        // params.set('type', action);
-        // params.set('destination', 'zfb');
-        // params.set('domain', domain);
-        // return this.http.get('https://ripplefox.com/bridge', { params: params })
         return this.http.get(gateway.federation_url, { params: params })
             .map(this.extractData)
             .catch(this.handleError);

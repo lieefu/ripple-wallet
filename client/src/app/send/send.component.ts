@@ -9,6 +9,7 @@ import { GlobalVariable } from '../global-variable';
     styleUrls: ['./send.component.css']
 })
 export class SendComponent implements OnInit {
+    constructor(private ripple: RippleService, private gv: GlobalVariable, private router: Router) { }
     tipinfo: string;
     tipinfo_path:string;
     recipient_label: string;
@@ -26,8 +27,7 @@ export class SendComponent implements OnInit {
     isShowAmount: boolean = false;
     isShowSendXRPbtn: boolean = false;
     isShowPaths: boolean = false;
-    timer;
-    constructor(private ripple: RippleService, private gv: GlobalVariable, private router: Router) { }
+    timer;    
 
     ngOnInit() {
     }
@@ -84,7 +84,7 @@ export class SendComponent implements OnInit {
         if (value && value > 0) {
             this.paths = [];
             this.isShowSendXRPbtn = (this.Amount.currency == "XRP");
-            this.Amount.value = (value);
+            this.Amount.value = value;
             this.pathfind = {
                 "source": {
                     "address": this.gv.wallet.address
