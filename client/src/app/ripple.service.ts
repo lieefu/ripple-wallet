@@ -44,6 +44,9 @@ export class RippleService {
     getOrderbook(address,orderbook,limit){
         return this.httpPost("api/getOrderbook/"+address+"/"+limit,{orderbook:orderbook});
     }
+    getOrders(address){
+        return this.httpGet("api/getOrders/"+address);
+    }
     ///////////////////////////
     setTrustline(address, trust) {
         return this.httpPost("api/setTrustline/" + address, { trust: trust });

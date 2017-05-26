@@ -1,3 +1,133 @@
-<p>
-  trade works!
-</p>
+<div class="card">
+    <div class="card-block">
+        <div class="row">
+            <div class="col-md-6" style="border-right: 3px solid #cccccc;">
+                <div class="form-inline">
+                    <div class="input-group col1" style="width:230px">
+                        <div class="input-group-addon">购买数量({{orderbook.base.currency}})</div>
+                        <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="">
+                    </div>
+                    <div class="input-group col1" style="width:150px">
+                        <div class="input-group-addon">单价</div>
+                        <input type="text" class="form-control" id="inlineFormInputGroup1" placeholder="">
+                    </div>
+                    <div class="input-group col">
+                        <div class="input-group-addon">总价({{orderbook.counter.currency}})</div>
+                        <input type="text" class="form-control" id="inlineFormInputGroup2" placeholder="">
+                    </div>
+                    <button type="submit" class="btn btn-primary">购买</button>
+                </div>
+            </div>
+            <div class="col-md-6" style="border-right: 3px solid #cccccc;">
+                <div class="form-inline">
+                    <div class="input-group col1" style="width:230px">
+                        <div class="input-group-addon">卖出数量({{orderbook.base.currency}})</div>
+                        <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="">
+                    </div>
+                    <div class="input-group col1" style="width:150px">
+                        <div class="input-group-addon">单价</div>
+                        <input type="text" class="form-control" id="inlineFormInputGroup1" placeholder="">
+                    </div>
+                    <div class="input-group col">
+                        <div class="input-group-addon">总价({{orderbook.counter.currency}})</div>
+                        <input type="text" class="form-control" id="inlineFormInputGroup2" placeholder="">
+                    </div>
+                    <button type="submit" class="btn btn-primary">卖出</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <h3 class="card-header">交易挂单</h3>
+    <div class="card-block">
+        <div class="row">
+            <div class="col-md-6" style="border-right: 3px solid #cccccc;">
+                <div class="row gridhead">
+                    <div class="col-md-2">{{gv.lang==0?'Acount':'挂单人'}}</div>
+                    <div class="col-md-2" style="text-align:right">{{orderbook.counter.currency}} {{gv.lang==0?'SUM':'合计'}}</div>
+                    <div class="col-md-2" style="text-align:right">{{orderbook.base.currency}} {{gv.lang==0?'SUM':'合计'}}</div>
+                    <div class="col-md-2" style="text-align:right">{{orderbook.counter.currency}} {{gv.lang==0?'SIZE':'量'}}</div>
+                    <div class="col-md-2" style="text-align:right">{{orderbook.base.currency}} {{gv.lang==0?'SIZE':'量'}}</div>
+                    <div class="col-md-2" style="text-align:center">{{gv.lang==0?'BID Price':'买价'}}</div>
+                </div>
+                <div class="row" *ngFor="let offer of bids,let index=index" [class.odd]="index%2==0" [class.even]="index%2==1">
+                    <div class="col-md-2" data-toggle="tooltip" data-placement="right" title="{{offer.address}}">
+                        <a type='text' href="./account/{{offer.account}}" target="_blank">{{offer.address_short}}</a>
+                    </div>
+                    <div class="col-md-2" style="text-align:right">{{offer.sum_money}}</div>
+                    <div class="col-md-2" style="text-align:right">{{offer.sum_goods}}</div>
+                    <div class="col-md-2" style="text-align:right">{{offer.money}}</div>
+                    <div class="col-md-2" style="text-align:right">{{offer.goods}}</div>
+                    <div class="col-md-2" style="text-align:center">{{offer.price}}</div>
+                </div>
+            </div>
+            <div class="col-md-6" style="border-right: 3px solid #cccccc;">
+                <div class="row gridhead">
+                    <div class="col-md-2" style="text-align:center">{{gv.lang==0?'ASK Price':'卖价'}}</div>
+                    <div class="col-md-2" style="text-align:right">{{orderbook.base.currency}} {{gv.lang==0?'SIZE':'量'}}</div>
+                    <div class="col-md-2" style="text-align:right">{{orderbook.counter.currency}} {{gv.lang==0?'SIZE':'量'}}</div>
+                    <div class="col-md-2" style="text-align:right">{{orderbook.base.currency}} {{gv.lang==0?'SUM':'合计'}}</div>
+                    <div class="col-md-2" style="text-align:right">{{orderbook.counter.currency}} {{gv.lang==0?'SUM':'合计'}}</div>
+                    <div class="col-md-2">{{gv.lang==0?'Acount':'挂单人'}}</div>
+                </div>
+                <div class="row" *ngFor="let offer of asks,let index=index" [class.odd]="index%2==0" [class.even]="index%2==1">
+                    <div class="col-md-2" style="text-align:center">{{offer.price}}</div>
+                    <div class="col-md-2" style="text-align:right">{{offer.goods}}</div>
+                    <div class="col-md-2" style="text-align:right">{{offer.money}}</div>
+                    <div class="col-md-2" style="text-align:right">{{offer.sum_goods}}</div>
+                    <div class="col-md-2" style="text-align:right">{{offer.sum_money}}</div>
+                    <div class="col-md-2" data-toggle="tooltip" data-placement="left" title="{{offer.address}}">
+                        <a type='text' href="./account/{{offer.account}}" target="_blank">{{offer.address_short}}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h3 class="card-header">我的交易挂单</h3>
+    <div class="card-block">
+        <div class="row">
+            <div class="col-md-6" style="border-right: 3px solid #cccccc;">
+                <div class="row   gridhead">
+                    <div class="col-md-4" style="text-align:left">
+                        <div class="row">
+                            <div class="col-md" style="text-align:left">我的买单</div>
+                            <div class="col-md" style="text-align:right">买入量</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4" style="text-align:right">总价</div>
+                    <div class="col-md-3" style="text-align:right">单价</div>
+                    <div class="col-md-1"></div>
+                </div>
+                <div class="row" *ngFor="let offer of buys,let index=index" [class.odd]="index%2==0" [class.even]="index%2==1">
+                    <div class="col-md-4" style="text-align:right">{{offer.goods.value}} {{offer.goods.currency}}.{{offer.goods.counterparty_short}}</div>
+                    <div class="col-md-4" style="text-align:right">{{offer.money.value}} {{offer.money.currency}}.{{offer.money.counterparty_short}}</div>
+                    <div class="col-md-3" style="text-align:right">{{offer.price}}  {{offer.money.currency}}/{{offer.goods.currency}}</div>
+                    <div class="col-md-1"><button type="button" class="btn btn-link btn-sm" style="cursor:pointer" (click) = "cancelOrder(offer.sequence)">取消</button></div>
+                </div>
+            </div>
+            <div class="col-md-6" style="border-right: 3px solid #cccccc;">
+                <div class="row  gridhead">
+                    <div class="col-md-4" style="text-align:left">
+                        <div class="row">
+                            <div class="col-md" style="text-align:left">我的卖单</div>
+                            <div class="col-md" style="text-align:right">卖出量</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4" style="text-align:right">总价</div>
+                    <div class="col-md-3" style="text-align:right">单价</div>
+                    <div class="col-md-1"></div>
+                </div>
+                <div class="row" *ngFor="let offer of sells,let index=index" [class.odd]="index%2==0" [class.even]="index%2==1">
+                    <div class="col-md-4" style="text-align:right">{{offer.goods.value}} {{offer.goods.currency}}.{{offer.goods.counterparty_short}}</div>
+                    <div class="col-md-4" style="text-align:right">{{offer.money.value}} {{offer.money.currency}}.{{offer.money.counterparty_short}}</div>
+                    <div class="col-md-3" style="text-align:right">{{offer.price}} {{offer.money.currency}}/{{offer.goods.currency}}</div>
+                    <div class="col-md-1"><button type="button" class="btn btn-link btn-sm" style="cursor:pointer" (click) = "cancelOrder(offer.sequence)">取消</button></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

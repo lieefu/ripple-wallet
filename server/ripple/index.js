@@ -1,7 +1,5 @@
 'use strict';
-const {
-    RippleAPI
-} = require('ripple-lib');
+const RippleAPI = require('ripple-lib').RippleAPI;
 const keypairs = require('ripple-keypairs');
 const crypto = require('crypto');
 const rippleApi = new RippleAPI({

@@ -1,1 +1,30 @@
 /* You can add global styles to this file, and also import other style files */
+[hidden] { display: none !important;}
+.gridhead {
+  /*font-size: 12px;*/
+  font-weight: bold;
+  background: Snow;
+  color: black
+}
+.gridhead1 {
+  background: white;
+  color: Beige
+}
+.gridfooter {
+  background: white;
+}
+.even {
+  background: WhiteSmoke;
+}
+.odd {
+  background: white;
+}
+.panel-heading {
+  padding: 3px 3px;
+}
+.gap {
+  border-right: 3px solid #fff;
+}
+a[type='text'] {
+  color: #333
+}

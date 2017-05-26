@@ -166,6 +166,14 @@ router.post("/getOrderbook/:address/:limit",(req,res) =>{
         resultError(res,error);
     })
 })
+router.get("/getOrders/:address",(req,res)=>{
+    var address = req.params.address;
+    ripple('getOrders', address,{limit:100}).then((info) => {
+        resultOk(res, info);
+    }).catch((error) => {
+        resultError(res, error);
+    })
+});
 router.get("/accountinfo/:address", (req, res) => {
     var address = req.params.address;
     ripple('getAccountInfo', address).then((info) => {
