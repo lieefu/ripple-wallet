@@ -47,6 +47,12 @@ export class RippleService {
     getOrders(address){
         return this.httpGet("api/getOrders/"+address);
     }
+    addOrder(address,order){
+        return this.httpPost("api/addOrder/"+address,{order:order});
+    }
+    cancellOrder(address,sequence){
+        return this.httpGet("api/cancellOrder/"+address+"/"+sequence);
+    }
     ///////////////////////////
     setTrustline(address, trust) {
         return this.httpPost("api/setTrustline/" + address, { trust: trust });

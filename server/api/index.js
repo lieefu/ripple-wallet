@@ -155,25 +155,36 @@ router.get('/encryptwallet/:address/:password', (req, res) => {
 
 })
 //////////////////////////////////////
-router.post("/getOrderbook/:address/:limit",(req,res) =>{
+router.post("/getOrderbook/:address/:limit", (req, res) => {
     let address = req.params.address;
-    let limit =  +req.params.limit;
-    let  orderbook = req.body.orderbook;
-    console.log(address,orderbook,{limit:limit});
-    ripple("getOrderbook",address,orderbook,{limit:limit}).then(info=>{
-        resultOk(res,info);
-    }).catch(error =>{
-        resultError(res,error);
+    let limit = +req.params.limit;
+    let orderbook = req.body.orderbook;
+    console.log(address, orderbook, {
+        limit: limit
+    });
+    ripple("getOrderbook", address, orderbook, {
+        limit: limit
+    }).then(info => {
+        resultOk(res, info);
+    }).catch(error => {
+        resultError(res, error);
     })
 })
-router.get("/getOrders/:address",(req,res)=>{
+router.get("/getOrders/:address", (req, res) => {
     var address = req.params.address;
-    ripple('getOrders', address,{limit:100}).then((info) => {
+    ripple('getOrders', address, {
+        limit: 100
+    }).then((info) => {
         resultOk(res, info);
     }).catch((error) => {
         resultError(res, error);
     })
 });
+router.get("/getfee",(req,res)=>{
+    ripple("getFee").then(info=>{
+        resultOk(res,info);
+    })
+})
 router.get("/accountinfo/:address", (req, res) => {
     var address = req.params.address;
     ripple('getAccountInfo', address).then((info) => {
@@ -219,6 +230,68 @@ router.get("/serverinfo", (req, res) => {
     })
 })
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+router.post("/addOrder/:address", (req, res) => {
+    const address = req.params.address;
+    const order = req.body.order;
+    const wallet = req.session.wallet;
+    //console.log("wallet:",wallet);
+    if (!wallet || wallet.isLocked) {
+        return resultError(res, "钱包未解锁");
+    }
+    ripple('prepareOrder', address, order, Ripple.instructions).then(prepare => {
+        console.log(prepare);
+        if (prepare.txJSON) {
+            const txJSON = prepare.txJSON;
+            const secret = wallet.seed;
+            //console.log(txJSON,secret);
+            Ripple.submit(txJSON, secret).then(result => {
+                resultOk(res, result);
+            }).catch(error => {
+                resultError(res, error);
+            })
+        } else {
+            resultError(res, "prepareOrder error!不该发生的错误");
+        }
+    }).catch((error) => {
+        resultError(res, {
+            resultCode: "libError",
+            resultMessage: "prepareOrder error:" + error
+        });
+    });
+
+});
+
+router.get("/cancellOrder/:address/:sequence", (req, res) => {
+    const address = req.params.address;
+    const sequence = req.params.sequence;
+    const wallet = req.session.wallet;
+    //console.log("wallet:",wallet);
+    if (!wallet || wallet.isLocked) {
+        return resultError(res, "钱包未解锁");
+    }
+    ripple('prepareOrderCancellation', address, {orderSequence: +sequence}, Ripple.instructions).then(prepare => {
+        console.log(prepare);
+        if (prepare.txJSON) {
+            const txJSON = prepare.txJSON;
+            const secret = wallet.seed;
+            //console.log(txJSON,secret);
+            Ripple.submit(txJSON, secret).then(result => {
+                resultOk(res, result);
+            }).catch(error => {
+                resultError(res, error);
+            })
+        } else {
+            resultError(res, "prepareOrderCancellation error!不该发生的错误");
+        }
+    }).catch((error) => {
+        resultError(res, {
+            resultCode: "libError",
+            resultMessage: "prepareOrderCancellation error:" + error
+        });
+    });
+
+})
+
 router.post("/payment", (req, res) => {
     const payment = req.body.payment;
     const address = payment.source.address;
@@ -292,12 +365,12 @@ router.post("/setTrustline/:address", (req, res) => {
         });
     });
 });
-router.post('/getPaths',(req,res) =>{
+router.post('/getPaths', (req, res) => {
     const pathfind = req.body.pathfind;
-    ripple('getPaths',pathfind).then(paths=>{
-        resultOk(res,paths);
-    }).catch(error =>{
-        resultError(res,error);
+    ripple('getPaths', pathfind).then(paths => {
+        resultOk(res, paths);
+    }).catch(error => {
+        resultError(res, error);
     })
 });
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

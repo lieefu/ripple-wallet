@@ -3,44 +3,56 @@
         <div class="row">
             <div class="col-md-6" style="border-right: 3px solid #cccccc;">
                 <div class="form-inline">
-                    <div class="input-group col1" style="width:230px">
-                        <div class="input-group-addon">购买数量({{orderbook.base.currency}})</div>
-                        <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="">
+                    <div class="input-group col1" style="width:250px">
+                        <div class="input-group-addon">购买({{orderbook.base.currency}})</div>
+                        <input type="text" class="form-control" id="inlineFormInputGroup" [(ngModel)]="buy_quantity" (focus)="focusAutoBuyValue(1,buy_quantity,buy_price,buy_totalPrice)">
                     </div>
                     <div class="input-group col1" style="width:150px">
                         <div class="input-group-addon">单价</div>
-                        <input type="text" class="form-control" id="inlineFormInputGroup1" placeholder="">
+                        <input type="text" class="form-control" id="inlineFormInputGroup1" [(ngModel)]="buy_price" (focus)="focusAutoBuyValue(2,buy_quantity,buy_price,buy_totalPrice)">
                     </div>
                     <div class="input-group col">
                         <div class="input-group-addon">总价({{orderbook.counter.currency}})</div>
-                        <input type="text" class="form-control" id="inlineFormInputGroup2" placeholder="">
+                        <input type="text" class="form-control" id="inlineFormInputGroup2" [(ngModel)]="buy_totalPrice" (focus)="focusAutoBuyValue(3,buy_quantity,buy_price,buy_totalPrice)">
                     </div>
-                    <button type="submit" class="btn btn-primary">购买</button>
+                    <button type="submit" class="btn btn-primary" (click)="addOrder('buy',buy_quantity,buy_totalPrice)">购买</button>
                 </div>
             </div>
             <div class="col-md-6" style="border-right: 3px solid #cccccc;">
                 <div class="form-inline">
-                    <div class="input-group col1" style="width:230px">
-                        <div class="input-group-addon">卖出数量({{orderbook.base.currency}})</div>
-                        <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="">
+                    <div class="input-group col1" style="width:250px">
+                        <div class="input-group-addon">卖出({{orderbook.base.currency}})</div>
+                        <input type="text" class="form-control" id="inlineFormInputGroup" [(ngModel)]="sell_quantity" (focus)="focusAutoSellValue(1,sell_quantity,sell_price,sell_totalPrice)">
                     </div>
                     <div class="input-group col1" style="width:150px">
                         <div class="input-group-addon">单价</div>
-                        <input type="text" class="form-control" id="inlineFormInputGroup1" placeholder="">
+                        <input type="text" class="form-control" id="inlineFormInputGroup1" [(ngModel)]="sell_price" (focus)="focusAutoSellValue(2,sell_quantity,sell_price,sell_totalPrice)">
                     </div>
                     <div class="input-group col">
                         <div class="input-group-addon">总价({{orderbook.counter.currency}})</div>
-                        <input type="text" class="form-control" id="inlineFormInputGroup2" placeholder="">
+                        <input type="text" class="form-control" id="inlineFormInputGroup2" [(ngModel)]="sell_totalPrice" (focus)="focusAutoSellValue(3,sell_quantity,sell_price,sell_totalPrice)">
                     </div>
-                    <button type="submit" class="btn btn-primary">卖出</button>
+                    <button type="submit" class="btn btn-primary" (click)="addOrder('sell',sell_quantity,sell_totalPrice)">卖出</button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6" style="border-right: 3px solid #cccccc;">
+                <div class="alert" role="alert" *ngIf="buyTipinfo.isVisble" [ngClass]="buyTipinfo.class">
+                    {{buyTipinfo.text}}
+                </div>
+            </div>
+            <div class="col-md-6" style="border-right: 3px solid #cccccc;">
+                <div class="alert" role="alert" *ngIf="sellTipinfo.isVisble" [ngClass]="sellTipinfo.class">
+                    {{sellTipinfo.text}}
                 </div>
             </div>
         </div>
     </div>
 </div>
 <div class="card">
-    <h3 class="card-header">交易挂单</h3>
-    <div class="card-block">
+    <h6 class="card-title">交易对:{{orderbook.base.currency}}.{{orderbook.base.counterparty}}/{{orderbook.counter.currency}}.{{orderbook.counter.counterparty}}</h6>
+    <div class="card-block" style="padding-top: 0.0rem;">
         <div class="row">
             <div class="col-md-6" style="border-right: 3px solid #cccccc;">
                 <div class="row gridhead">
@@ -51,9 +63,9 @@
                     <div class="col-md-2" style="text-align:right">{{orderbook.base.currency}} {{gv.lang==0?'SIZE':'量'}}</div>
                     <div class="col-md-2" style="text-align:center">{{gv.lang==0?'BID Price':'买价'}}</div>
                 </div>
-                <div class="row" *ngFor="let offer of bids,let index=index" [class.odd]="index%2==0" [class.even]="index%2==1">
+                <div class="row" *ngFor="let offer of bids,let index=index" [style.color]="offer.color" [class.odd]="index%2==0" [class.even]="index%2==1">
                     <div class="col-md-2" data-toggle="tooltip" data-placement="right" title="{{offer.address}}">
-                        <a type='text' href="./account/{{offer.account}}" target="_blank">{{offer.address_short}}</a>
+                        {{offer.address_short}}
                     </div>
                     <div class="col-md-2" style="text-align:right">{{offer.sum_money}}</div>
                     <div class="col-md-2" style="text-align:right">{{offer.sum_goods}}</div>
@@ -71,14 +83,14 @@
                     <div class="col-md-2" style="text-align:right">{{orderbook.counter.currency}} {{gv.lang==0?'SUM':'合计'}}</div>
                     <div class="col-md-2">{{gv.lang==0?'Acount':'挂单人'}}</div>
                 </div>
-                <div class="row" *ngFor="let offer of asks,let index=index" [class.odd]="index%2==0" [class.even]="index%2==1">
+                <div class="row" *ngFor="let offer of asks,let index=index" [style.color]="offer.color" [class.odd]="index%2==0" [class.even]="index%2==1">
                     <div class="col-md-2" style="text-align:center">{{offer.price}}</div>
                     <div class="col-md-2" style="text-align:right">{{offer.goods}}</div>
                     <div class="col-md-2" style="text-align:right">{{offer.money}}</div>
                     <div class="col-md-2" style="text-align:right">{{offer.sum_goods}}</div>
                     <div class="col-md-2" style="text-align:right">{{offer.sum_money}}</div>
                     <div class="col-md-2" data-toggle="tooltip" data-placement="left" title="{{offer.address}}">
-                        <a type='text' href="./account/{{offer.account}}" target="_blank">{{offer.address_short}}</a>
+                        {{offer.address_short}}
                     </div>
                 </div>
             </div>
@@ -87,8 +99,7 @@
 </div>
 
 <div class="card">
-    <h3 class="card-header">我的交易挂单</h3>
-    <div class="card-block">
+    <div class="card-block" style="padding-top: 0.0rem;">
         <div class="row">
             <div class="col-md-6" style="border-right: 3px solid #cccccc;">
                 <div class="row   gridhead">
@@ -105,8 +116,8 @@
                 <div class="row" *ngFor="let offer of buys,let index=index" [class.odd]="index%2==0" [class.even]="index%2==1">
                     <div class="col-md-4" style="text-align:right">{{offer.goods.value}} {{offer.goods.currency}}.{{offer.goods.counterparty_short}}</div>
                     <div class="col-md-4" style="text-align:right">{{offer.money.value}} {{offer.money.currency}}.{{offer.money.counterparty_short}}</div>
-                    <div class="col-md-3" style="text-align:right">{{offer.price}}  {{offer.money.currency}}/{{offer.goods.currency}}</div>
-                    <div class="col-md-1"><button type="button" class="btn btn-link btn-sm" style="cursor:pointer" (click) = "cancelOrder(offer.sequence)">取消</button></div>
+                    <div class="col-md-3" style="text-align:right">{{offer.price}} {{offer.money.currency}}/{{offer.goods.currency}}</div>
+                    <div class="col-md-1"><button type="button" class="btn btn-link btn-sm" style="cursor:pointer" (click)="cancelOrder(offer.sequence)">取消</button></div>
                 </div>
             </div>
             <div class="col-md-6" style="border-right: 3px solid #cccccc;">
@@ -125,7 +136,7 @@
                     <div class="col-md-4" style="text-align:right">{{offer.goods.value}} {{offer.goods.currency}}.{{offer.goods.counterparty_short}}</div>
                     <div class="col-md-4" style="text-align:right">{{offer.money.value}} {{offer.money.currency}}.{{offer.money.counterparty_short}}</div>
                     <div class="col-md-3" style="text-align:right">{{offer.price}} {{offer.money.currency}}/{{offer.goods.currency}}</div>
-                    <div class="col-md-1"><button type="button" class="btn btn-link btn-sm" style="cursor:pointer" (click) = "cancelOrder(offer.sequence)">取消</button></div>
+                    <div class="col-md-1"><button type="button" class="btn btn-link btn-sm" style="cursor:pointer" (click)="cancelOrder(offer.sequence)">取消</button></div>
                 </div>
             </div>
         </div>

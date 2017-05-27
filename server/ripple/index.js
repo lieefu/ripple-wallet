@@ -17,6 +17,7 @@ rippleApi.on('disconnected', (code) => {
     console.log('disconnected, code:', code);
 });
 const instructions = {
+    maxFee: "10000",
     maxLedgerVersionOffset: 10
 };
 ///////////////////////////
