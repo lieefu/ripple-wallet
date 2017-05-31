@@ -5,5 +5,4 @@ export class GlobalVariable {
     lang:number=1;
     wallet:any;
     constructor() { }
-
 }

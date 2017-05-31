@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card" *ngIf="orderbook.base">
     <div class="card-block">
         <div class="row">
             <div class="col-md-6" style="border-right: 3px solid #cccccc;">
@@ -36,6 +36,9 @@
                 </div>
             </div>
         </div>
+        <div align="center" *ngIf="loadingAddorder">
+            <img src="assets/img/ripplelogo.png" class="loading">正在提交交易挂单...
+        </div>
         <div class="row">
             <div class="col-md-6" style="border-right: 3px solid #cccccc;">
                 <div class="alert" role="alert" *ngIf="buyTipinfo.isVisble" [ngClass]="buyTipinfo.class">
@@ -50,8 +53,17 @@
         </div>
     </div>
 </div>
-<div class="card">
-    <h6 class="card-title">交易对:{{orderbook.base.currency}}.{{orderbook.base.counterparty}}/{{orderbook.counter.currency}}.{{orderbook.counter.counterparty}}</h6>
+<div class="card" *ngIf="orderbook.base">
+    <!-- <h6 class="card-title">交易对:{{orderbook.base.currency}}.{{orderbook.base.counterparty}}/{{orderbook.counter.currency}}.{{orderbook.counter.counterparty}}</h6> -->
+    <div ngbDropdown class="d-inline-block">
+        <button class="btn btn-outline-info" id="dropdownTradepares" ngbDropdownToggle>交易对:{{orderbook.base.currency}}.{{orderbook.base.counterparty}}/{{orderbook.counter.currency}}.{{orderbook.counter.counterparty}}</button>
+        <div class="dropdown-menu" aria-labelledby="dropdownCurrency">
+            <button class="dropdown-item" *ngFor="let tradepare of gv.wallet.tradepares" (click)="parseTradepare(tradepare);">{{tradepare}}</button>
+        </div>
+    </div>
+    <div align="center" *ngIf="loadingOrderbook">
+        <img src="assets/img/ripplelogo.png" class="loading">Loading orderbook data...
+    </div>
     <div class="card-block" style="padding-top: 0.0rem;">
         <div class="row">
             <div class="col-md-6" style="border-right: 3px solid #cccccc;">

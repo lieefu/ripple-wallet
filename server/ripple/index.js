@@ -4,6 +4,8 @@ const keypairs = require('ripple-keypairs');
 const crypto = require('crypto');
 const rippleApi = new RippleAPI({
     server: 'wss://s-west.ripple.com' // Public rippled server hosted by Ripple, Inc.
+    //server: 'wss://s1.ripple.com' // Public rippled server hosted by Ripple, Inc.
+    //server: 'wss://s-east.ripple.com' // Public rippled server hosted by Ripple, Inc.
 });
 rippleApi.on('error', (errorCode, errorMessage) => {
     console.log(errorCode + ': ' + errorMessage);

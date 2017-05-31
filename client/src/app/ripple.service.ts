@@ -5,6 +5,17 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 @Injectable()
 export class RippleService {
+    trustline2Tradepairs(trustlines){
+        console.log(trustlines);
+        let tradepares=[];
+        for(let i=0;i<trustlines.length;i++){
+            let trustline=trustlines[i];
+            tradepares.push(`XRP./${trustline.specification.currency}.${trustline.specification.counterparty}`)
+        }
+        return tradepares;
+    };
+
+    ////////////////////////////////////
     constructor(private http: Http) { }
     ///////////////////////
     getWallet(address): Observable<any> {

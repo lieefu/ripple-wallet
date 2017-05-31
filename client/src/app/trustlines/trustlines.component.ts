@@ -20,6 +20,8 @@ export class TrustlinesComponent implements OnInit {
             console.log(result);
             if(result.ok){
                 this.gv.wallet.trustlines=result.data;
+                this.gv.wallet.tradepares = this.ripple.trustline2Tradepairs(result.data);
+                console.log(this.gv.wallet.tradepares);
             }
         })
     }

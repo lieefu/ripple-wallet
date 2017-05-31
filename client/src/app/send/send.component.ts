@@ -9,6 +9,12 @@ import { GlobalVariable } from '../global-variable';
     styleUrls: ['./send.component.css']
 })
 export class SendComponent implements OnInit {
+    timer;
+    ngOnDestroy() {
+        if(this.timer) clearInterval(this.timer);
+        this.timer = null;
+        console.log("SendComponent ngOnDestroy");
+    }
     constructor(private ripple: RippleService, private gv: GlobalVariable, private router: Router) { }
     tipinfo: string;
     tipinfo_path:string;
@@ -27,8 +33,6 @@ export class SendComponent implements OnInit {
     isShowAmount: boolean = false;
     isShowSendXRPbtn: boolean = false;
     isShowPaths: boolean = false;
-    timer;    
-
     ngOnInit() {
     }
     resolveRecipient() {
@@ -95,6 +99,7 @@ export class SendComponent implements OnInit {
                 }
             };
             this.tipinfo = ` 转账资产：“${this.Amount.value}${this.Amount.currency}” 接收方地址：“${this.destination_address}” `;
+            if (!this.timer) this.timer = setInterval(() => { this.findPaths(); }, 10000);
             this.findPaths();
         } else {
             this.tipinfo = "请输入发送数量";
@@ -102,12 +107,6 @@ export class SendComponent implements OnInit {
     }
     findPaths() {
         console.log("find paths", this.pathfind);
-        if (!this.timer) this.timer = setInterval(() => { this.findPaths(); }, 10000);
-        if (this.router.url !== "/send") {
-            console.log("clear timer find paths", this.router.url, !this.timer);
-            clearInterval(this.timer);
-            this.timer = null;
-        }
         this.ripple.getPaths(this.pathfind).subscribe(result => {
             //console.log(result);
             if (result.ok) {
