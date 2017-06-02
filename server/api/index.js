@@ -9,6 +9,31 @@ router.get('/', (req, res) => {
     resultOk(res, 'api works,ok');
 });
 //////////////////////////////////////
+router.get("/getcontacts", (req, res) => {
+    let filename = config.dataPath + "contacts.txt";
+    let contacts=[];
+    fs.readFile(filename, "utf-8", (err, data) => {
+        if (err) {
+            console.log("联系人文件不存在");
+        }else{
+          contacts = JSON.parse(data);
+        }
+        return resultOk(res, contacts);
+    });
+});
+router.post('/savecontacts', (req, res) => {
+    console.log(config.dataPath);
+    let contacts = req.body.contacts;
+    let filename = config.dataPath + "contacts.txt";
+    console.log(contacts);
+    fs.writeFile(filename, JSON.stringify(contacts), function(err) {
+        if (err) {
+            return resultError(res, "联系人保存失败！" + err);
+        }
+        return resultOk(res, "联系人数据保存成功");
+    });
+})
+//////////////////////////////////////
 router.get('/getwallets', (req, res) => {
     fs.readdir(config.dataPath, (err, files) => {
         if (err) {
@@ -91,7 +116,6 @@ router.get('/savewallet', (req, res) => {
         }
         return resultOk(res, wallet);
     });
-
 })
 ///////////////////////////////
 router.get('/decryptwallet/:address/:password', (req, res) => {

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import {RippleService} from '../ripple.service';
-import { GlobalVariable } from '../global-variable';
+import { GlobalVariable, Tipinfo} from '../global-variable';
 
 @Component({
     selector: 'app-withdraw',
@@ -9,7 +9,13 @@ import { GlobalVariable } from '../global-variable';
     styleUrls: ['./withdraw.component.css']
 })
 export class WithdrawComponent implements OnInit {
-    tipinfo: string;
+  timer;
+  ngOnDestroy() {
+      if(this.timer) clearInterval(this.timer);
+      this.timer = null;
+      console.log("WithdrawComponent ngOnDestroy");
+  }
+    tipinfo:Tipinfo=new Tipinfo();
     tipinfo_path: string;
     recipient_label: string;
     federation_json;
@@ -29,7 +35,6 @@ export class WithdrawComponent implements OnInit {
     paths = [];
     payment: any;
     isShowPaths: boolean = false;
-    timer;
 
     destination_tag:string;
     invoice_id:string;
@@ -81,18 +86,17 @@ export class WithdrawComponent implements OnInit {
         })
     }
     setWithdrawValue(value) {
-        this.tipinfo = "";
         if (value && value > 0) {
             console.log("提现数量：",value);
             for(let i in this.extra_fields){
                 if(!this.extra_fields[i].value || this.extra_fields[i].value.replace(/ /g, '')==""){
-                    this.tipinfo = `忘记填入：${this.extra_fields[i].label} `;
+                    this.tipinfo.showWarning( `忘记填入：${this.extra_fields[i].label} `,10);
                     return;
                 }
             }
             this.getQuote();
         } else {
-            this.tipinfo = "请输入发送数量";
+            this.tipinfo.showInfo("请输入发送数量",10);
         }
     }
     withDraw(path){
@@ -103,7 +107,6 @@ export class WithdrawComponent implements OnInit {
         this.sendPayment(this.payment);
     }
     getQuote(){
-        this.tipinfo = "";
         console.log(this.extra_fields);
         let data ={
             destination:this.destination,
@@ -135,26 +138,18 @@ export class WithdrawComponent implements OnInit {
                         "amount": this.Amount
                     }
                 };
-                this.tipinfo = ` 转账资产：“${this.Amount.value}${this.Amount.currency}” 接收方地址：“${this.destination_address}” `;
+                this.tipinfo.showInfo( ` 提现额度：${this.withdraw_value}${this.Amount.currency}，需要发送:${this.Amount.value}${this.Amount.currency} 到接收方：“${this.recipient_label}(${this.destination_address})” `);
+                if (!this.timer) this.timer = setInterval(() => { this.findPaths(); }, 10000);
                 this.findPaths();
             }else{
-                this.tipinfo =`${result.errCode},${result.msg}`;
+                this.tipinfo.showWarning(`${result.errCode},${result.msg}|${result.error},${result.error_message}`,12);
             }
         })
     }
     findPaths() {
         console.log("find paths", this.pathfind);
-        if(!this.gateway){
-            return;
-        }
-        if (!this.timer) this.timer = setInterval(() => { this.findPaths(); }, 10000);
-        if (this.router.url !== "/withdraw") {
-            console.log("clear timer find paths", this.router.url, !this.timer);
-            clearInterval(this.timer);
-            this.timer = null;
-        }
         this.ripple.getPaths(this.pathfind).subscribe(result => {
-            //console.log(result);
+            console.log(result);
             if (result.ok) {
                 this.paths = result.data;
                 console.log("paths",this.paths);

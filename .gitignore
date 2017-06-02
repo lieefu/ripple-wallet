@@ -3,6 +3,7 @@
 # secret data
 /server/config/local.env.js
 /server/data/*.key
+/server/data/
 # compiled output
 dist/
 tmp/

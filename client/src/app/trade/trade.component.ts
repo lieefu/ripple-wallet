@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import {RippleService} from '../ripple.service';
-import { GlobalVariable } from '../global-variable';
+import { GlobalVariable, Tipinfo } from '../global-variable';
 
 @Component({
     selector: 'app-trade',
@@ -20,7 +20,7 @@ export class TradeComponent implements OnInit {
     constructor(private ripple: RippleService, private gv: GlobalVariable, private router: Router) { }
     asks: Array<BookOrder> = new Array();
     bids: Array<BookOrder> = new Array();
-    limit: number = 20;
+    limit: number = 10;
     buy_quantity: number;
     buy_price: number;
     buy_totalPrice: number;
@@ -38,7 +38,7 @@ export class TradeComponent implements OnInit {
     loadingAddorder: boolean = false;
     loadingOrderbook: boolean = false;
     ngOnInit() {
-        console.log("TradeComponent ngOnInit");
+        this.loadingOrderbook = true;
         if (this.gv.wallet.tradepares) {
             this.init();
         } else {
@@ -48,12 +48,9 @@ export class TradeComponent implements OnInit {
     init() {
         this.initBookOrders();
         this.parseTradepare(this.gv.wallet.tradepares[0]);
-        // this.orderbook.setBase("XRP");
-        // //this.orderbook.setCounter("CNY","razqQKzJRdB4UxFPWf5NEpEG3WMkmwgcXA");//"rKiCet8SdvWxPXnAgYarFUXMh1zCPz432Y");
-        // this.orderbook.setCounter("CNY","rKiCet8SdvWxPXnAgYarFUXMh1zCPz432Y");
         this.getMyOrders();
         this.timer1 = setInterval(() => { this.getOrderbook() }, 10000);
-        this.timer2 = setInterval(() => { this.getMyOrders() }, 30000);
+        this.timer2 = setInterval(() => { this.getMyOrders() }, 60000);
     }
     parseTradepare(tradeparestr) {
         console.log(tradeparestr);
@@ -114,19 +111,15 @@ export class TradeComponent implements OnInit {
             console.log(result);
             this.loadingAddorder = false;
             if (result.ok) {
-                tipinfo.class = "alert-success";
-                tipinfo.text = "挂单成功";
+                tipinfo.showSuccess("挂单成功",6)
                 this.delayGetMyOrders();
             } else {
-                tipinfo.class = "alert-danger";
                 if (result.data.resultCode === "tecUNFUNDED_OFFER") {
-                    tipinfo.text = "余额不足。";
+                    tipinfo.showWarning( "余额不足。",6)
                 } else {
-                    tipinfo.text = result.data.resultMessage;
+                    tipinfo.showDanger(result.data.resultMessage,12);
                 }
             }
-            tipinfo.show(6);
-            console.log(tipinfo);
         })
     }
     cancelOrder(sequence) {
@@ -172,7 +165,7 @@ export class TradeComponent implements OnInit {
         for (let i = 0; i < myorders.length; i++) {
             let myorder = myorders[i];
             let tmp_order: MyOrder;
-            console.log(myorder);
+            //console.log(myorder);
             if (myorder.specification.direction === "sell") {
                 if (!this.sells[selli]) this.sells.push(new MyOrder());
                 tmp_order = this.sells[selli];
@@ -197,7 +190,7 @@ export class TradeComponent implements OnInit {
             tmp_order.money.value = money_value.toFixed(2);
             tmp_order.sequence = myorder.properties.sequence;
         }
-        console.log("myorder:", this.buys, this.sells);
+        //console.log("myorder:", this.buys, this.sells);
     }
     setBookOrders(d_orders: Array<BookOrder>, s_orders) {
         let sum_goods: number = 0;
@@ -297,21 +290,5 @@ class Orderbook {
     }
     setCounter(curr_name: string, address: string = "") {
         this.counter = new Currency(curr_name, address);//this.getCurrency(curr_name,address);
-    }
-}
-
-class Tipinfo {
-    isVisble: boolean = false;
-    class: string;
-    text: string;
-    hide() {
-        this.isVisble = false;
-    }
-    show(second: number = 0) {
-        this.isVisble = true;
-        if (second == 0) {
-            return;
-        }
-        setTimeout(() => { this.isVisble = false }, second * 1000);
     }
 }

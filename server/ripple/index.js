@@ -1,12 +1,15 @@
 'use strict';
-const RippleAPI = require('ripple-lib').RippleAPI;
 const keypairs = require('ripple-keypairs');
 const crypto = require('crypto');
+const RippleAPI = require('ripple-lib').RippleAPI;
 const rippleApi = new RippleAPI({
     server: 'wss://s-west.ripple.com' // Public rippled server hosted by Ripple, Inc.
     //server: 'wss://s1.ripple.com' // Public rippled server hosted by Ripple, Inc.
     //server: 'wss://s-east.ripple.com' // Public rippled server hosted by Ripple, Inc.
 });
+// const RippleAPI = require('ripple-lib').RippleAPIBroadcast;
+// const rippleApi = new RippleAPI(['wss://s-west.ripple.com', 'wss://s-east.ripple.com',  'wss://s1.ripple.com' ]);
+//const rippleApi = new RippleAPI(['wss://s2.ripple.com']);
 rippleApi.on('error', (errorCode, errorMessage) => {
     console.log(errorCode + ': ' + errorMessage);
 });
@@ -20,7 +23,7 @@ rippleApi.on('disconnected', (code) => {
 });
 const instructions = {
     maxFee: "10000",
-    maxLedgerVersionOffset: 10
+    maxLedgerVersionOffset: 9
 };
 ///////////////////////////
 function submit(txJSON, secret) {
