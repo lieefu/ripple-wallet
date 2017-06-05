@@ -1,4 +1,5 @@
 <div class="container">
+    <br>
     <div class="form-inline">
         <label class="mr-sm-2" for="name">名字：</label>
         <input type="text" class="form-control" id="name" [(ngModel)]="name" (focusout)="setAddress(name)">
@@ -7,11 +8,12 @@
         <button class="btn btn-primary" *ngIf="!isExist" (click)="addContact(name,address)">添加</button>
         <button class="btn btn-danger" *ngIf="isExist" (click)="delContact(name)">删除</button>
     </div>
-    <div class="row gridhead" *ngIf="gv.contacts.data.length">
-        <div class="col-md-2" style="text-align:left">我的联系人列表</div>
+    <br>
+    <div class="row gridhead" *ngIf="gv.data.contacts.length">
+        <div class="col-md-2" style="text-align:left">联系人列表</div>
         <div class="col-md" style="text-align:left">钱包地址</div>
     </div>
-    <div class="row" *ngFor="let contact of gv.contacts.data,let index=index" [class.odd]="index%2==0" [class.even]="index%2==1">
+    <div class="row" *ngFor="let contact of gv.data.contacts,let index=index" [class.odd]="index%2==0" [class.even]="index%2==1">
         <div class="col-md-2" style="text-align:left">{{contact.name}} </div>
         <div class="col-md" style="text-align:left">{{contact.address}}</div>
     </div>

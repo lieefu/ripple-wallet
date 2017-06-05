@@ -15,34 +15,31 @@ export class ContactsComponent implements OnInit {
     constructor(private ripple: RippleService, private gv: GlobalVariable, private router: Router) { }
 
     ngOnInit() {
-        // this.gv.contacts.push(new Contact("myname", "rEp4SYVfwQgGbWCJV4tBAgGNpG2KeiaY1W"));
-        // this.ripple.savecontacts(this.gv.contacts).subscribe(result =>{
-        //     console.log(result);
-        // })
-        this.ripple.getcontacts().subscribe(result => {
+        this.ripple.getdata().subscribe(result => {
             console.log(result);
             if (result.ok) {
-                this.gv.contacts.data = result.data;
+                this.gv.data.contacts = result.data.contacts;
+                this.gv.data.tradepare = result.data.tradepare;
             }
         })
     }
     setAddress(name: string) {
         console.log(name);
-        this.isExist = this.gv.contacts.existName(name);
+        this.isExist = this.gv.data.existName(name);
         if (this.isExist) {
-            this.address = this.gv.contacts.getContact(name).address;
+            this.address = this.gv.data.getContact(name).address;
         }
     }
     addContact(name: string, address: string) {
-        this.gv.contacts.addContact(name, address);
+        this.gv.data.addContact(name, address);
         this.saveContacts();
     }
     delContact(name:string){
-        this.gv.contacts.delContact(name);
+        this.gv.data.delContact(name);
         this.saveContacts();
     }
     saveContacts() {
-        this.ripple.savecontacts(this.gv.contacts.data).subscribe(result => {
+        this.ripple.savedata(this.gv.data).subscribe(result => {
             console.log(result);
         })
     }

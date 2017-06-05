@@ -18,12 +18,12 @@ export class RippleService {
     ////////////////////////////////////
     constructor(private http: Http) { }
     /////////
-    getcontacts(){
-      return this.httpGet("api/getcontacts");
+    getdata(){
+      return this.httpGet("api/getdata");
     }
-    savecontacts(contacts){
-       console.log(contacts);
-        return this.httpPost("api/savecontacts",{contacts:contacts});
+    savedata(data){
+       console.log(data);
+        return this.httpPost("api/savedata",{data:data});
     }
     ///////////////////////
     getWallet(address): Observable<any> {

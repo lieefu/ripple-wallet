@@ -4,36 +4,37 @@ import { Injectable } from '@angular/core';
 export class GlobalVariable {
     lang: number = 1;
     wallet: any;
-    contacts: Contacts = new Contacts();
+    data: WalletData = new WalletData();
     constructor() { }
 }
-class Contacts {
-    data: Array<Contact> = [];
+class WalletData {
+    contacts: Array<Contact> = [];
+    tradepare:any={};
     constructor() { }
     addContact(name: string, address: string): boolean {
         if (this.existName(name)) return false;
-        this.data.push(new Contact(name, address));
+        this.contacts.push(new Contact(name, address));
         return true;
     }
     delContact(name: string): boolean {
-        console.log(this.data.length);
-        for (let i = this.data.length; i--;) {
+        console.log(this.contacts.length);
+        for (let i = this.contacts.length; i--;) {
             console.log(i);
-            if (this.data[i].name == name) {
-                this.data.splice(i, 1);
+            if (this.contacts[i].name == name) {
+                this.contacts.splice(i, 1);
             }
         }
         return true;
     }
     existName(name: string): boolean {
-        for (let i = 0; i < this.data.length; i++) {
-            if (name == this.data[i].name) return true;
+        for (let i = 0; i < this.contacts.length; i++) {
+            if (name == this.contacts[i].name) return true;
         }
         return false;
     }
     getContact(name:string):Contact{
-        for (let i = 0; i < this.data.length; i++) {
-            if (name == this.data[i].name) return this.data[i];
+        for (let i = 0; i < this.contacts.length; i++) {
+            if (name == this.contacts[i].name) return this.contacts[i];
         }
         return null;
     }

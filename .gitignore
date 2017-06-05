@@ -2,8 +2,7 @@
 
 # secret data
 /server/config/local.env.js
-/server/data/*.key
-/server/data/
+/server/wallet/
 # compiled output
 dist/
 tmp/

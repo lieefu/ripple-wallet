@@ -9,28 +9,28 @@ router.get('/', (req, res) => {
     resultOk(res, 'api works,ok');
 });
 //////////////////////////////////////
-router.get("/getcontacts", (req, res) => {
-    let filename = config.dataPath + "contacts.txt";
-    let contacts=[];
+router.get("/getdata", (req, res) => {
+    let filename = config.dataPath + "data.txt";
+    let walletdata={contacts:[]};
     fs.readFile(filename, "utf-8", (err, data) => {
         if (err) {
-            console.log("联系人文件不存在");
+            console.log("联系人等数据文件不存在");
         }else{
-          contacts = JSON.parse(data);
+          walletdata = JSON.parse(data);
         }
-        return resultOk(res, contacts);
+        return resultOk(res, walletdata);
     });
 });
-router.post('/savecontacts', (req, res) => {
+router.post('/savedata', (req, res) => {
     console.log(config.dataPath);
-    let contacts = req.body.contacts;
-    let filename = config.dataPath + "contacts.txt";
-    console.log(contacts);
-    fs.writeFile(filename, JSON.stringify(contacts), function(err) {
+    let walletdata = req.body.data;
+    let filename = config.dataPath + "data.txt";
+    console.log(walletdata);
+    fs.writeFile(filename, JSON.stringify(walletdata), function(err) {
         if (err) {
-            return resultError(res, "联系人保存失败！" + err);
+            return resultError(res, "联系人等数据保存失败！" + err);
         }
-        return resultOk(res, "联系人数据保存成功");
+        return resultOk(res, "联系人等数据保存成功");
     });
 })
 //////////////////////////////////////

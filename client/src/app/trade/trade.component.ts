@@ -47,13 +47,27 @@ export class TradeComponent implements OnInit {
     }
     init() {
         this.initBookOrders();
-        this.parseTradepare(this.gv.wallet.tradepares[0]);
         this.getMyOrders();
-        this.timer1 = setInterval(() => { this.getOrderbook() }, 10000);
         this.timer2 = setInterval(() => { this.getMyOrders() }, 60000);
+        let tradeparestr=this.gv.wallet.tradepares[0];
+        this.ripple.getdata().subscribe(result =>{
+            console.log(result);
+            if(result.ok){
+                this.gv.data.contacts = result.data.contacts;
+                this.gv.data.tradepare = result.data.tradepare||{};
+                if(this.gv.data.tradepare.hasOwnProperty(this.gv.wallet.address)){
+                    tradeparestr=this.gv.data.tradepare[this.gv.wallet.address];
+                }
+            }
+            this.parseTradepare(tradeparestr);
+        })
     }
     parseTradepare(tradeparestr) {
         console.log(tradeparestr);
+        this.gv.data.tradepare[this.gv.wallet.address]=tradeparestr;
+        this.ripple.savedata(this.gv.data).subscribe(result=>{
+            console.log("保存联系人，默认交易对",result);
+        })
         let pos1 = tradeparestr.indexOf(".");
         let pos2 = tradeparestr.indexOf("/");
         this.orderbook.setBase(tradeparestr.substring(0, pos1), tradeparestr.substring(pos1 + 1, pos2));
@@ -63,7 +77,9 @@ export class TradeComponent implements OnInit {
         //this.asks=this.bids=[];
         this.loadingOrderbook = true;
         this.getOrderbook();
+        if(!this.timer1) this.timer1 = setInterval(() => { this.getOrderbook() }, 10000);
         console.log(this.orderbook);
+
     }
     getTrustlines(address) {
         this.ripple.getTrustlines(address).subscribe(result => {
