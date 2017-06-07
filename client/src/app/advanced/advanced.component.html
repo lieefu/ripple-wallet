@@ -1,0 +1,14 @@
+<div class="container">
+    <div class="form-inline">
+        <div class="input-group col">
+            <div class="input-group-addon">钱包({{gv.wallet.address}})名字:</div>
+            <input type="text" class="form-control" id="inlineFormInputGroup" [(ngModel)]="name" placeholder="设置一个钱包名字，方便自己记忆">
+        </div>
+        <button type="submit" class="btn btn-primary" (click)="setWalletName(name)">确定</button>
+    </div>
+    <div class="row">
+        <div class="col">
+            <hr>
+        </div>
+    </div>
+</div>

@@ -15,7 +15,7 @@
                         <div class="input-group-addon">总价({{orderbook.counter.currency}})</div>
                         <input type="text" class="form-control" id="inlineFormInputGroup2" [(ngModel)]="buy_totalPrice" (focus)="focusAutoBuyValue(3,buy_quantity,buy_price,buy_totalPrice)">
                     </div>
-                    <button type="submit" class="btn btn-primary" (click)="addOrder('buy',buy_quantity,buy_totalPrice)">购买</button>
+                    <button type="submit" class="btn btn-success" (click)="addOrder('buy',buy_quantity,buy_totalPrice)">购买</button>
                 </div>
             </div>
             <div class="col-md-6" style="border-right: 3px solid #cccccc;">
@@ -32,7 +32,7 @@
                         <div class="input-group-addon">总价({{orderbook.counter.currency}})</div>
                         <input type="text" class="form-control" id="inlineFormInputGroup2" [(ngModel)]="sell_totalPrice" (focus)="focusAutoSellValue(3,sell_quantity,sell_price,sell_totalPrice)">
                     </div>
-                    <button type="submit" class="btn btn-primary" (click)="addOrder('sell',sell_quantity,sell_totalPrice)">卖出</button>
+                    <button type="submit" class="btn btn-danger" (click)="addOrder('sell',sell_quantity,sell_totalPrice)">卖出</button>
                 </div>
             </div>
         </div>

@@ -5,7 +5,13 @@
     </div>
     <div class="form-group" *ngFor="let field of extra_fields">
         <label for="{{field.name}}">{{field.label}}</label>
-        <input [type]="field.type" class="form-control" [id]="field.name" [attr.aria-describedby]="field.name+'Help'" [(ngModel)]="field.value">
+        <input [type]="field.type" class="form-control" [id]="field.name" [attr.aria-describedby]="field.name+'Help'" [(ngModel)]="field.value" *ngIf="!field.options">
+        <div ngbDropdown class="form-control" *ngIf="field.options">
+            <button class="btn btn-secondary" id="dropdownTradepares" ngbDropdownToggle>{{field.optlabel||"　　　　　　　　　　　　"}}</button>
+            <div class="dropdown-menu" aria-labelledby="dropdownCurrency">
+                <button class="dropdown-item" *ngFor="let opt of field.options" (click)="field.value=opt.value;field.optlabel=opt.label;">{{opt.label}}</button>
+            </div>
+        </div>
         <small [id]="field.name+'Help'" class="form-text text-muted">{{field.hint}}</small>
     </div>
     <div class="form-inline" *ngIf="extra_fields.length>0">

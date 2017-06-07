@@ -24,7 +24,7 @@ export class NewwalletComponent implements OnInit {
             if(result.ok){
                 this.isSave=true;
                 this.gv.wallet=result.data;
-                this.tipinfo="钱包已经保存成功，接下来你应该点击加密钱包按钮，输入钱包口令，加密这个钱包。";
+                this.tipinfo="钱包已保存，接下来你应该点击加密钱包按钮，输入钱包口令，加密这个钱包。";
             }else{
                 this.isSave=false;
                 this.tipinfo=result.data;

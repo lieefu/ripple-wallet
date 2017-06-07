@@ -26,6 +26,9 @@ export class RippleService {
         return this.httpPost("api/savedata",{data:data});
     }
     ///////////////////////
+    setWalletName(name:string){
+        return this.httpGet('api/setWalletName/'+name);
+    }
     getWallet(address): Observable<any> {
         return this.httpGet('api/getwallet/' + address);
     }

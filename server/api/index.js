@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const fs = require('fs');
+const path = require('path');
 const config = require("../config.js");
 const Ripple = require("../ripple");
 const ripple = Ripple.ripple;
@@ -11,12 +12,14 @@ router.get('/', (req, res) => {
 //////////////////////////////////////
 router.get("/getdata", (req, res) => {
     let filename = config.dataPath + "data.txt";
-    let walletdata={contacts:[]};
+    let walletdata = {
+        contacts: []
+    };
     fs.readFile(filename, "utf-8", (err, data) => {
         if (err) {
             console.log("联系人等数据文件不存在");
-        }else{
-          walletdata = JSON.parse(data);
+        } else {
+            walletdata = JSON.parse(data);
         }
         return resultOk(res, walletdata);
     });
@@ -34,22 +37,86 @@ router.post('/savedata', (req, res) => {
     });
 })
 //////////////////////////////////////
-router.get('/getwallets', (req, res) => {
-    fs.readdir(config.dataPath, (err, files) => {
-        if (err) {
-            return resultError(res, "搜索钱包文件遇到错误");
-        }
-        let addressarray = [];
-        files.forEach(function(filename) {
-            //console.log(filename);
-            let pos = filename.indexOf(".key");
-            if (pos > 0) {
-                filename = filename.substring(0, pos);
-                addressarray.push(filename);
-            }
+/**
+ * Promise all
+ * @author Loreto Parisi (loretoparisi at gmail dot com)
+ */
+function promiseAllP(items, block) {
+    var promises = [];
+    items.forEach(function(item, index) {
+        promises.push(function(item, i) {
+            return new Promise(function(resolve, reject) {
+                return block.apply(this, [item, index, resolve, reject]);
+            });
+        }(item, index))
+    });
+    return Promise.all(promises);
+} //promiseAll
+
+/**
+ * read files
+ * @param dirname string
+ * @return Promise
+ * @author Loreto Parisi (loretoparisi at gmail dot com)
+ * @see http://stackoverflow.com/questions/10049557/reading-all-files-in-a-directory-store-them-in-objects-and-send-the-object
+ */
+function readFiles(dirname) {
+    return new Promise((resolve, reject) => {
+        fs.readdir(dirname, function(err, filenames) {
+            if (err) return reject(err);
+            promiseAllP(filenames,
+                    (filename, index, resolve, reject) => {
+                        fs.readFile(path.resolve(dirname, filename), 'utf-8', function(err, content) {
+                            if (err) return reject(err);
+                            return resolve({
+                                filename: filename,
+                                data: content
+                            });
+                        });
+                    })
+                .then(results => {
+                    return resolve(results);
+                })
+                .catch(error => {
+                    return reject(error);
+                });
         });
-        return resultOk(res, addressarray);
-    })
+    });
+}
+router.get('/getwallets', (req, res) => {
+    let wallets = [];
+    readFiles(config.dataPath)
+        .then(files => {
+            files.forEach((file, index) => {
+                //console.log("item", index, "data: ", file.data);
+                let data=JSON.parse(file.data);
+                if (data.address) {
+                    let wallet = {};
+                    wallet.address = data.address;
+                    if (data.name) wallet.name = `(${data.name})`;
+                    wallets.push(wallet);
+                }
+            });
+            resultOk(res, wallets)
+        })
+        .catch(error => {
+            resultError(res, error);;
+        });
+    // fs.readdir(config.dataPath, (err, files) => {
+    //     if (err) {
+    //         return resultError(res, "搜索钱包文件遇到错误");
+    //     }
+    //     let addressarray = [];
+    //     files.forEach(function(filename) {
+    //         //console.log(filename);
+    //         let pos = filename.indexOf(".key");
+    //         if (pos > 0) {
+    //             filename = filename.substring(0, pos);
+    //             addressarray.push(filename);
+    //         }
+    //     });
+    //     return resultOk(res, addressarray);
+    // })
 })
 ///////////////////////////////////////
 router.get("/getwallet/:address", (req, res) => {
@@ -103,12 +170,25 @@ router.get("/importwallet/:seed", (req, res) => {
     resultOk(res, wallet);
 });
 //////////////////////////////////////
+router.get('/setWalletName/:name', (req, res) => {
+    let name = req.params.name;
+    let wallet = req.session.wallet;
+    if (!wallet) {
+        return resultError(res, "钱包不存在");
+    }
+    wallet.name = name;
+    savewallet(wallet, req, res);
+})
 router.get('/savewallet', (req, res) => {
     console.log(config.dataPath);
     let wallet = req.session.wallet;
     if (!wallet) {
         return resultError(res, "钱包尚未生成");
     }
+    savewallet(wallet, req, res);
+})
+
+function savewallet(wallet, req, res) {
     let filename = config.dataPath + wallet.address + ".key";
     fs.writeFile(filename, JSON.stringify(wallet), function(err) {
         if (err) {
@@ -116,7 +196,7 @@ router.get('/savewallet', (req, res) => {
         }
         return resultOk(res, wallet);
     });
-})
+}
 ///////////////////////////////
 router.get('/decryptwallet/:address/:password', (req, res) => {
     let address = req.params.address;
@@ -204,9 +284,9 @@ router.get("/getOrders/:address", (req, res) => {
         resultError(res, error);
     })
 });
-router.get("/getfee",(req,res)=>{
-    ripple("getFee").then(info=>{
-        resultOk(res,info);
+router.get("/getfee", (req, res) => {
+    ripple("getFee").then(info => {
+        resultOk(res, info);
     })
 })
 router.get("/accountinfo/:address", (req, res) => {
@@ -293,7 +373,9 @@ router.get("/cancellOrder/:address/:sequence", (req, res) => {
     if (!wallet || wallet.isLocked) {
         return resultError(res, "钱包未解锁");
     }
-    ripple('prepareOrderCancellation', address, {orderSequence: +sequence}, Ripple.instructions).then(prepare => {
+    ripple('prepareOrderCancellation', address, {
+        orderSequence: +sequence
+    }, Ripple.instructions).then(prepare => {
         console.log(prepare);
         if (prepare.txJSON) {
             const txJSON = prepare.txJSON;

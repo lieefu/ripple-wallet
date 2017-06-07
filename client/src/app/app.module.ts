@@ -25,6 +25,7 @@ import { SendComponent } from './send/send.component';
 import { WithdrawComponent } from './withdraw/withdraw.component';
 import { DepositComponent } from './deposit/deposit.component';
 import { TradeComponent } from './trade/trade.component';
+import { AdvancedComponent } from './advanced/advanced.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { TradeComponent } from './trade/trade.component';
     SendComponent,
     WithdrawComponent,
     DepositComponent,
-    TradeComponent
+    TradeComponent,
+    AdvancedComponent
   ],
   imports: [
     BrowserModule,
