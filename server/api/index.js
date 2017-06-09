@@ -9,32 +9,53 @@ const ripple = Ripple.ripple;
 router.get('/', (req, res) => {
     resultOk(res, 'api works,ok');
 });
+/////////////////////////////////////
+router.post("/reconnect",(req,res) =>{
+    let url=req.body.url;
+    Ripple.reconnect(url).then(info =>{
+        resultOk(res,info);
+    }).catch(err =>{
+        resultError(res,err);
+    })
+})
 //////////////////////////////////////
-router.get("/getdata", (req, res) => {
-    let filename = config.dataPath + "data.txt";
-    let walletdata = {
-        contacts: []
-    };
+function readFile(filename,req,res,okmsg,errmsg){
     fs.readFile(filename, "utf-8", (err, data) => {
         if (err) {
-            console.log("联系人等数据文件不存在");
+            console.log(errmsg);
+            return resultError(res,errmsg)
         } else {
-            walletdata = JSON.parse(data);
+            return resultOk(res, JSON.parse(data));
         }
-        return resultOk(res, walletdata);
     });
+}
+router.get("/getconfig",(req,res) =>{
+    let filename = config.dataPath + "config.json";
+    readFile(filename,req,res,"","配置文件未找到");
+})
+router.post("/saveconfig",(req,res) =>{
+    let configdata = req.body.data;
+    let filename = config.dataPath + "config.json";
+    saveFile(filename,configdata,req,res,"配置数据保存成功","配置数据数据保存失败！");
+})
+router.get("/getdata", (req, res) => {
+    let filename = config.walletPath + "data.txt";
+    readFile(filename,req,res);
 });
-router.post('/savedata', (req, res) => {
-    console.log(config.dataPath);
-    let walletdata = req.body.data;
-    let filename = config.dataPath + "data.txt";
-    console.log(walletdata);
-    fs.writeFile(filename, JSON.stringify(walletdata), function(err) {
+function  saveFile(filename,data,req,res,okmsg,errmsg){
+    fs.writeFile(filename, JSON.stringify(data), function(err) {
         if (err) {
-            return resultError(res, "联系人等数据保存失败！" + err);
+            return resultError(res,  errmsg+ err);
+        }else{
+            return resultOk(res, okmsg);
         }
-        return resultOk(res, "联系人等数据保存成功");
     });
+}
+router.post('/savedata', (req, res) => {
+    //console.log(config.walletPath);
+    let walletdata = req.body.data;
+    let filename = config.walletPath + "data.txt";
+    saveFile(filename,walletdata,req,res,"联系人等数据保存成功","联系人等数据保存失败！");
 })
 //////////////////////////////////////
 /**
@@ -85,7 +106,7 @@ function readFiles(dirname) {
 }
 router.get('/getwallets', (req, res) => {
     let wallets = [];
-    readFiles(config.dataPath)
+    readFiles(config.walletPath)
         .then(files => {
             files.forEach((file, index) => {
                 //console.log("item", index, "data: ", file.data);
@@ -102,34 +123,20 @@ router.get('/getwallets', (req, res) => {
         .catch(error => {
             resultError(res, error);;
         });
-    // fs.readdir(config.dataPath, (err, files) => {
-    //     if (err) {
-    //         return resultError(res, "搜索钱包文件遇到错误");
-    //     }
-    //     let addressarray = [];
-    //     files.forEach(function(filename) {
-    //         //console.log(filename);
-    //         let pos = filename.indexOf(".key");
-    //         if (pos > 0) {
-    //             filename = filename.substring(0, pos);
-    //             addressarray.push(filename);
-    //         }
-    //     });
-    //     return resultOk(res, addressarray);
-    // })
 })
 ///////////////////////////////////////
 router.get("/getwallet/:address", (req, res) => {
     let address = req.params.address;
     let wallet = {};
-    let filename = config.dataPath + address + ".key";
+    let filename = config.walletPath + address + ".key";
     fs.readFile(filename, "utf-8", (err, data) => {
         if (err) {
             return resultError(res, "钱包文件不存在");
+        }else{
+            let wallet = JSON.parse(data);
+            req.session.wallet = wallet;
+            return resultOk(res, wallet);
         }
-        let wallet = JSON.parse(data);
-        req.session.wallet = wallet;
-        return resultOk(res, wallet);
     });
 });
 //////////////////////////////////////
@@ -180,7 +187,7 @@ router.get('/setWalletName/:name', (req, res) => {
     savewallet(wallet, req, res);
 })
 router.get('/savewallet', (req, res) => {
-    console.log(config.dataPath);
+    console.log(config.walletPath);
     let wallet = req.session.wallet;
     if (!wallet) {
         return resultError(res, "钱包尚未生成");
@@ -189,7 +196,7 @@ router.get('/savewallet', (req, res) => {
 })
 
 function savewallet(wallet, req, res) {
-    let filename = config.dataPath + wallet.address + ".key";
+    let filename = config.walletPath + wallet.address + ".key";
     fs.writeFile(filename, JSON.stringify(wallet), function(err) {
         if (err) {
             return resultError(res, "钱包保存失败！" + err);
@@ -201,7 +208,7 @@ function savewallet(wallet, req, res) {
 router.get('/decryptwallet/:address/:password', (req, res) => {
     let address = req.params.address;
     let password = req.params.password;
-    let filename = config.dataPath + address + ".key";
+    let filename = config.walletPath + address + ".key";
     fs.readFile(filename, "utf-8", (err, data) => {
         if (err) {
             return resultError(res, "钱包文件不存在");
@@ -227,7 +234,7 @@ router.get('/decryptwallet/:address/:password', (req, res) => {
 router.get('/encryptwallet/:address/:password', (req, res) => {
     let address = req.params.address;
     let password = req.params.password;
-    let filename = config.dataPath + address + ".key";
+    let filename = config.walletPath + address + ".key";
     fs.readFile(filename, "utf-8", (err, data) => {
         if (err) {
             return resultError(res, "钱包文件不存在");
@@ -274,7 +281,7 @@ router.post("/getOrderbook/:address/:limit", (req, res) => {
         resultError(res, error);
     })
 })
-router.get("/getOrders/:address", (req, res) => {
+router.get("/getMyOrders/:address", (req, res) => {
     var address = req.params.address;
     ripple('getOrders', address, {
         limit: 100

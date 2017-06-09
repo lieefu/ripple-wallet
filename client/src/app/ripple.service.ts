@@ -17,7 +17,17 @@ export class RippleService {
 
     ////////////////////////////////////
     constructor(private http: Http) { }
+    reconnect(url){
+        return this.httpPost("api/reconnect",{url:url});
+    }
     /////////
+    getconfig(){
+        return this.httpGet("api/getconfig");
+    }
+    saveconfig(data){
+       console.log(data);
+        return this.httpPost("api/saveconfig",{data:data});
+    }
     getdata(){
       return this.httpGet("api/getdata");
     }
@@ -66,8 +76,8 @@ export class RippleService {
     getOrderbook(address,orderbook,limit){
         return this.httpPost("api/getOrderbook/"+address+"/"+limit,{orderbook:orderbook});
     }
-    getOrders(address){
-        return this.httpGet("api/getOrders/"+address);
+    getMyOrders(address){
+        return this.httpGet("api/getMyOrders/"+address);
     }
     addOrder(address,order){
         return this.httpPost("api/addOrder/"+address,{order:order});

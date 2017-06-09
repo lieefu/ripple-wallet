@@ -2,7 +2,7 @@
 const keypairs = require('ripple-keypairs');
 const crypto = require('crypto');
 const RippleAPI = require('ripple-lib').RippleAPI;
-const rippleApi = new RippleAPI({
+var rippleApi = new RippleAPI({
     server: 'wss://s-west.ripple.com' // Public rippled server hosted by Ripple, Inc.
     //server: 'wss://s1.ripple.com' // Public rippled server hosted by Ripple, Inc.
     //server: 'wss://s-east.ripple.com' // Public rippled server hosted by Ripple, Inc.
@@ -21,10 +21,37 @@ rippleApi.on('disconnected', (code) => {
     // will be 1000 if this was normal closure
     console.log('disconnected, code:', code);
 });
+rippleApi.connect();
 const instructions = {
     maxFee: "10000",
     maxLedgerVersionOffset: 9
 };
+////////////////////////
+function reconnect(url) {
+    console.log("reconnect:" + url);
+    rippleApi = new RippleAPI({
+        server: url
+    });
+    // const RippleAPI = require('ripple-lib').RippleAPIBroadcast;
+    // const rippleApi = new RippleAPI(['wss://s-west.ripple.com', 'wss://s-east.ripple.com',  'wss://s1.ripple.com' ]);
+    //const rippleApi = new RippleAPI(['wss://s2.ripple.com']);
+    rippleApi.on('error', (errorCode, errorMessage) => {
+        console.log(errorCode + ': ' + errorMessage);
+    });
+    rippleApi.on('connected', () => {
+        console.log('on reconnected');
+    });
+    rippleApi.on('disconnected', (code) => {
+        // code - [close code](https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent) sent by the server
+        // will be 1000 if this was normal closure
+        console.log('disconnected, code:', code);
+    });
+    return new Promise(function(resolve, reject) {
+        rippleApi.connect().then(() => {
+            resolve("reconnected success");
+        }).catch(reject);
+    })
+}
 ///////////////////////////
 function submit(txJSON, secret) {
     return new Promise((resolve, reject) => {
@@ -139,5 +166,6 @@ module.exports = {
     createWalletFromPhrase,
     encryptSeed,
     decryptSeed,
-    submit
+    submit,
+    reconnect
 }

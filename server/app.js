@@ -21,10 +21,10 @@ const routes = require('./routes');
 require('./chat')(socketio);
 // Set our api routes
 app.use('/', routes);
-app.use(express.static(path.join(config.root, 'dist')));
+app.use(express.static(path.join(config.clientRoot, 'dist')));
 // Catch all other routes and return the index file
 app.get('*', (req, res) => {
-    res.sendFile(path.join(config.root,"dist/index.html"));
+    res.sendFile(path.join(config.clientRoot,"dist/index.html"));
 });
 
 /// Start server

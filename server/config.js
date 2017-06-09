@@ -5,6 +5,7 @@ module.exports = {
     // Server port
     port: process.env.PORT || 3000,
     // Root path of server
-    root: path.normalize(__dirname + '/../client'),
-    dataPath:path.normalize(__dirname + '/wallet/')
+    clientRoot: path.normalize(__dirname + '/../client'),
+    dataPath:path.normalize(__dirname + '/data/'),
+    walletPath:path.normalize(__dirname + '/wallet/')
 }

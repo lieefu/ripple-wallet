@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class GlobalVariable {
     lang: number = 1;
+    connected:boolean=true;
     wallet: any;
     data: WalletData = new WalletData();
     constructor() { }

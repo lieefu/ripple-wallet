@@ -150,7 +150,7 @@ export class TradeComponent implements OnInit {
     }
     getMyOrders() {
         console.log("getMyOrders");
-        this.ripple.getOrders(this.gv.wallet.address).subscribe(result => {
+        this.ripple.getMyOrders(this.gv.wallet.address).subscribe(result => {
             console.log(result);
             this.setMyOrders(result.data);
         })
