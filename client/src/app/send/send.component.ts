@@ -10,6 +10,8 @@ import { GlobalVariable } from '../global-variable';
 })
 export class SendComponent implements OnInit {
     timer;
+    tag:number;
+    memo:string;
     ngOnDestroy() {
         if(this.timer) clearInterval(this.timer);
         this.timer = null;
@@ -138,6 +140,12 @@ export class SendComponent implements OnInit {
     }
     sendPayment(payment) {
         console.log("payment:", payment);
+        if(this.tag) payment.source.tag=payment.destination.tag = this.tag;
+        if(this.memo) payment.memos={
+            "type": "rippleok.com",
+            "format": "plain/text",
+            "data": encodeURIComponent(this.memo) //decodeURIComponent
+        }
         this.ripple.sendPayment(payment).subscribe(result =>{
             console.log(result);
         })

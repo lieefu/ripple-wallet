@@ -451,7 +451,7 @@ router.post("/setTrustline/:address", (req, res) => {
         "ripplingDisabled": trust.ripplingDisabled,
         "frozen": trust.frozen,
         "memos": [{
-            "type": "rippleok",
+            "type": "rippleok.com",
             "format": "plain/text",
             "data": "Lieefu's ripple wallet, lieefu.com"
         }]

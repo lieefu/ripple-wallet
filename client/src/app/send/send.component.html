@@ -1,13 +1,21 @@
 <div class="container">
     <div class="form-group">
         <label for="recipient_label">接收方：</label>
-        <input type="text" class="form-control" id="recipient_label" [(ngModel)]="recipient_label" placeholder="输入钱包地址或者联系人名字" (focusout)="resolveRecipient();">
+        <input type="text" class="form-control" id="recipient_label" [(ngModel)]="recipient_label" placeholder="输入接收方钱包地址或者联系人名字" (focusout)="resolveRecipient();">
     </div>
     <br>
     <div class="form-group" *ngIf="isShowAmount">
         <div class="form-group row">
+            <div class="col-3">
+                <input class="form-control" type="text" id="amount-value" [(ngModel)]="tag"  placeholder="标注tag 数字格式">
+            </div>
+            <div class="col-9">
+                <input class="form-control" type="text" id="amount-value" [(ngModel)]="memo"  placeholder="转账/付款 备注信息">
+            </div>
+        </div>
+        <div class="form-group row">
             <div class="col-2">
-                <input class="form-control" type="text" id="amount-value" [(ngModel)]="amount_value" (focusout)="setValue(amount_value)" placeholder="输入发送数量">
+                <input class="form-control" type="text" id="amount-value" [(ngModel)]="amount_value" (focusout)="setValue(amount_value)" placeholder="转账/付款数量">
             </div>
             <div class="col-3">
                 <div ngbDropdown class="d-inline-block">
