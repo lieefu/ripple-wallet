@@ -6,10 +6,18 @@
     <br>
     <div class="form-group" *ngIf="isShowAmount">
         <div class="form-group row">
-            <div class="col-3">
-                <input class="form-control" type="text" id="amount-value" [(ngModel)]="tag"  placeholder="标注tag 数字格式">
+            <div class="col-6" (click)="showTag=!showTag;showTagInfo=(showTag?'-':'+')" style="cursor:pointer;color:blue;font-size:12px">
+                转账/付款 tag、invoice id和备注信息 <span>{{showTagInfo}}</span>
             </div>
-            <div class="col-9">
+        </div>
+        <div class="form-group row" *ngIf="showTag">
+            <div class="col-3">
+                <input class="form-control" type="text" id="amount-value" [(ngModel)]="tag"  placeholder="destination tag">
+            </div>
+            <div class="col-3">
+                <input class="form-control" type="text" id="amount-value" [(ngModel)]="invoiceID"  placeholder="invoice id">
+            </div>
+            <div class="col-6">
                 <input class="form-control" type="text" id="amount-value" [(ngModel)]="memo"  placeholder="转账/付款 备注信息">
             </div>
         </div>
@@ -31,7 +39,7 @@
             </div>
         </div>
         <div class="form-group row" *ngIf="tipinfo">
-            <div class="col">
+            <div class="col" style="color:gray">
                 {{tipinfo}}
             </div>
         </div>
@@ -41,9 +49,14 @@
             </div>
         </div>
         <div class="form-group row" *ngIf="tipinfo_path">
-            <div class="col">
+            <div class="col" style="color:gray">
                 {{tipinfo_path}}
             </div>
+        </div>
+    </div>
+    <div class="form-group row" *ngIf="tipinfo_payment">
+        <div class="col" style="color:gray">
+            {{tipinfo_payment}}
         </div>
     </div>
 </div>

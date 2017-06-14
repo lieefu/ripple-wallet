@@ -29,6 +29,7 @@ export class BalanceComponent implements OnInit {
             this.loadingBalance = false;
             if(result.ok){
                 //this.title = "正在加载资金余额信息，请稍后......";
+                this.gv.walletIsActive = true;
                 this.accountinfo = this.gv.wallet.accountinfo= result.data;
                 this.getBalances(this.gv.wallet.address);
             }else{

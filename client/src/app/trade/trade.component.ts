@@ -11,6 +11,7 @@ import { GlobalVariable, Tipinfo } from '../global-variable';
 export class TradeComponent implements OnInit {
     timer1;
     timer2;
+    haveTrustline:boolean=true;
     ngOnDestroy() {
         if(this.timer1) clearInterval(this.timer1);
         if(this.timer2) clearInterval(this.timer2);
@@ -46,6 +47,13 @@ export class TradeComponent implements OnInit {
         }
     }
     init() {
+        if(this.gv.wallet.tradepares.length<=0){
+            this.loadingOrderbook = false;
+            console.log("未有信任链");
+            this.haveTrustline = false;
+            return;
+        }
+        this.haveTrustline=true;
         this.initBookOrders();
         this.getMyOrders();
         this.timer2 = setInterval(() => { this.getMyOrders() }, 60000);

@@ -1,43 +1,45 @@
 <header>
-  <nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse">
-    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+    <nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse">
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-    <a class="navbar-brand" routerLink="/">Ripple钱包</a>
-    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" routerLink="/">首页 <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" routerLink="walletinfo" [class.disabled]="!gv.wallet">钱包资金</a>
-        </li>
-        <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" routerLink="send" [class.disabled]="!gv.wallet">转账付款</a>
-        </li>
-        <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" routerLink="trade" [class.disabled]="!gv.wallet">交易市场</a>
-        </li>
-        <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" routerLink="deposit" [class.disabled]="!gv.wallet">充值</a>
-        </li>
-        <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" routerLink="withdraw" [class.disabled]="!gv.wallet">提现</a>
-        </li>
-        <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" routerLink="trustlines" [class.disabled]="!gv.wallet">设置信任</a>
-        </li>
-        <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" routerLink="advanced" [class.disabled]="!gv.wallet">高级</a>
-        </li>
-      </ul>
-      <form class="form-inline my-2 my-md-0">
-          <span class="badge"  *ngIf="gv.wallet" [ngClass]="{'badge-success':gv.connected,'badge-default':!gv.connected}">{{gv.wallet.address}}</span>
-          <span class="badge badge-default"  *ngIf="gv.wallet?.isSecreted">P</span>
-          <span class="badge badge-default"  *ngIf="gv.wallet?.isLocked">L</span>
-      </form>
-    </div>
-  </nav>
+        <a class="navbar-brand" routerLink="/">Ripple钱包</a>
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item" routerLinkActive="active">
+                    <a class="nav-link" routerLink="/">首页 <span class="sr-only">(current)</span></a>
+                </li>
+                <ng-container *ngIf="gv.walletIsActive">
+                    <li class="nav-item" routerLinkActive="active">
+                        <a class="nav-link" routerLink="walletinfo" [class.disabled]="!gv.wallet">钱包资金</a>
+                    </li>
+                    <li class="nav-item" routerLinkActive="active">
+                        <a class="nav-link" routerLink="send" [class.disabled]="!gv.wallet">转账付款</a>
+                    </li>
+                    <li class="nav-item" routerLinkActive="active">
+                        <a class="nav-link" routerLink="trade" [class.disabled]="!gv.wallet">交易市场</a>
+                    </li>
+                    <li class="nav-item" routerLinkActive="active">
+                        <a class="nav-link" routerLink="deposit" [class.disabled]="!gv.wallet">充值</a>
+                    </li>
+                    <li class="nav-item" routerLinkActive="active">
+                        <a class="nav-link" routerLink="withdraw" [class.disabled]="!gv.wallet">提现</a>
+                    </li>
+                    <li class="nav-item" routerLinkActive="active">
+                        <a class="nav-link" routerLink="trustlines" [class.disabled]="!gv.wallet">设置信任</a>
+                    </li>
+                    <li class="nav-item" routerLinkActive="active">
+                        <a class="nav-link" routerLink="advanced" [class.disabled]="!gv.wallet">高级</a>
+                    </li>
+                </ng-container>
+            </ul>
+            <form class="form-inline my-2 my-md-0">
+                <span class="badge" *ngIf="gv.wallet" [ngClass]="{'badge-success':gv.connected,'badge-default':!gv.connected}">{{gv.wallet.address}}</span>
+                <span class="badge badge-default" *ngIf="gv.wallet?.isSecreted">P</span>
+                <span class="badge badge-default" *ngIf="gv.wallet?.isLocked">L</span>
+            </form>
+        </div>
+    </nav>
 </header>
 <div class="container-fluid main-container">
     <router-outlet></router-outlet>
@@ -45,8 +47,8 @@
 
 <!-- 底部区域 -->
 <footer class="navbar navbar-light bg-faded">
-  <div class="container">
-    <p>Designed and built by the <a href="http://www.lieefu.com" target="_blank">Lieefu Way</a>, My Email: <a href="mailto:lieefu@gmail.com">lieefu@gmail.com</a>
-    </p>
-  </div>
+    <div class="container">
+        <p>Designed and built by the <a href="http://www.lieefu.com" target="_blank">Lieefu Way</a>, My Email: <a href="mailto:lieefu@gmail.com">lieefu@gmail.com</a>
+        </p>
+    </div>
 </footer>

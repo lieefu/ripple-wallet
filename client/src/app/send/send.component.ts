@@ -12,6 +12,9 @@ export class SendComponent implements OnInit {
     timer;
     tag:number;
     memo:string;
+    invoiceID:string;
+    showTag:boolean=false;
+    showTagInfo:string ="+";
     ngOnDestroy() {
         if(this.timer) clearInterval(this.timer);
         this.timer = null;
@@ -20,6 +23,7 @@ export class SendComponent implements OnInit {
     constructor(private ripple: RippleService, private gv: GlobalVariable, private router: Router) { }
     tipinfo: string;
     tipinfo_path:string;
+    tipinfo_payment:string;
     recipient_label: string;
     currency_label: string = "XRP- Ripples";
     Amount: any = {
@@ -41,6 +45,7 @@ export class SendComponent implements OnInit {
         console.log(this.recipient_label);
         this.destination_address = this.recipient_label;
         this.isShowAmount = false;
+        this.tipinfo_payment = "";
         this.ripple.getTrustlines(this.destination_address).subscribe(result => {
             if (result.ok) {
                 console.log(result);
@@ -100,7 +105,7 @@ export class SendComponent implements OnInit {
                     "amount": this.Amount
                 }
             };
-            this.tipinfo = ` 转账资产：“${this.Amount.value}${this.Amount.currency}” 接收方地址：“${this.destination_address}” `;
+            this.tipinfo = ` 转账/付款：“${this.Amount.value}${this.Amount.currency}” 到对方钱包地址：“${this.destination_address}” `;
             if (!this.timer) this.timer = setInterval(() => { this.findPaths(); }, 10000);
             this.findPaths();
         } else {
@@ -114,11 +119,12 @@ export class SendComponent implements OnInit {
             if (result.ok) {
                 this.paths = result.data;
                 this.isShowPaths = true;
-                this.tipinfo_path = `点击上面按钮，将发送按钮上标注的资产，接收方：${this.destination_address} 收到：${this.Amount.value}${this.Amount.currency}`;
+                this.tipinfo_path = `点击上面按钮，将转账/付款 按钮上标注的资产，到接收方钱包地址：${this.destination_address} 对方将收到：${this.Amount.value}${this.Amount.currency}`;
             } else {
                 this.paths = [];
                 this.isShowPaths = false;
                 this.tipinfo_path = "";
+                console.log(result.data);
             }
         })
     }
@@ -140,14 +146,21 @@ export class SendComponent implements OnInit {
     }
     sendPayment(payment) {
         console.log("payment:", payment);
-        if(this.tag) payment.source.tag=payment.destination.tag = this.tag;
+        if(this.tag) payment.destination.tag = this.tag;
         if(this.memo) payment.memos={
             "type": "rippleok.com",
             "format": "plain/text",
             "data": encodeURIComponent(this.memo) //decodeURIComponent
         }
+        if(this.invoiceID) payment.invoiceID = this.invoiceID;
         this.ripple.sendPayment(payment).subscribe(result =>{
             console.log(result);
+            if(result.ok){
+                this.isShowAmount = false;
+                this.tipinfo_payment = "转账/汇款 成功";
+            }else{
+                this.tipinfo_payment = "转账/汇款 失败:"+JSON.stringify(result.data);
+            }
         })
     }
 }

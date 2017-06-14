@@ -21,6 +21,9 @@ export class TrustlineComponent implements OnInit {
         this.ripplingDisabled = this.trustline.specification.ripplingDisabled;
         this.frozen = this.trustline.specification.frozen;
     }
+    delete(){
+        this.tipinfo="删除方法：余额清零(把全部余额转账/付款到信任地址)，然后设置信任限额为0";
+    }
     save() {
         console.log(this.limit, this.ripplingDisabled, this.frozen);
         let address = this.gv.wallet.address;

@@ -1,1 +1,26 @@
+<div align="center" *ngIf="loadingTrustline">
+    <img src="assets/img/ripplelogo.png" class="loading">正在获取信任链数据...
+</div>
 <app-trustline *ngFor="let trustline of gv.wallet.trustlines" [trustline]="trustline"></app-trustline>
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            添加新的信任
+        </div>
+        <div class="card-block">
+            <p class="card-text">信任格式，货币简称.钱包地址</p>
+            <div class="form-inline">
+                <div class="input-group col">
+                    <div class="input-group-addon">信任:</div>
+                    <input type="text" class="form-control" id="inlineFormInputGroup" [(ngModel)]="turstlinestr" placeholder="格式示例:CNY.rXzxK7wpKLZ99qwXNiy5nFQUhYxFZq3Rd">
+                </div>
+                <button type="submit" class="btn btn-primary" (click)="addTrustline(turstlinestr)">添加</button>
+            </div>
+            <div  class="form-inline">
+                <div class="alert" role="alert" *ngIf="tipinfo.isVisble" [ngClass]="tipinfo.class">
+                    {{tipinfo.text}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

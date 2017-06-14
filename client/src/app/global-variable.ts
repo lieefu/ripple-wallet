@@ -5,6 +5,7 @@ export class GlobalVariable {
     lang: number = 1;
     connected:boolean=true;
     wallet: any;
+    walletIsActive:boolean=false;
     data: WalletData = new WalletData();
     constructor() { }
 }
