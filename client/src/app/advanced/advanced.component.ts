@@ -12,6 +12,9 @@ export class AdvancedComponent implements OnInit {
     name:string;
     serverURL:string;
     servers:Array<any>=[];
+    secret_str:string="s**************************************";
+    showsecret:boolean=false;
+    showsecret_label:string="显示";
     constructor(private ripple: RippleService, private gv: GlobalVariable, private router: Router) { }
 
     ngOnInit() {
@@ -22,6 +25,16 @@ export class AdvancedComponent implements OnInit {
                 this.servers = result.data.servers;
             }
         })
+    }
+    showSecret(){
+        this.showsecret = !this.showsecret;
+        if(this.showsecret){
+            this.showsecret_label="隐藏";
+            this.secret_str=this.gv.wallet.seed;
+        }else{
+            this.showsecret_label="显示";
+            this.secret_str="s**************************************";
+        }
     }
     addServer(url){
         this.servers.push({url:url,flag:1});

@@ -73,6 +73,11 @@ export class RippleService {
     getTrustlines(address) {
         return this.httpGet("api/getTrustlines/" + address);
     }
+    getTransactions(address,type){
+        //return this.httpGet("api/getTransactions/"+address+"/"+type);
+        return this.httpGet(`https://data.ripple.com/v2/accounts/${address}/transactions?type=${type}&result=tesSUCCESS&limit=100`);//&descending=true
+        //&descending=true加入这个参数，时长报错：ripple.service.ts:146 500 - Internal Server Error {"result":"error","message":"unable to retrieve transactions"}
+    }
     getOrderbook(address,orderbook,limit){
         return this.httpPost("api/getOrderbook/"+address+"/"+limit,{orderbook:orderbook});
     }

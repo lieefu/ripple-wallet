@@ -33,6 +33,7 @@ export class TradeComponent implements OnInit {
     buys: Array<MyOrder> = new Array();
     sells: Array<MyOrder> = new Array();
 
+    tipinfo: Tipinfo = new Tipinfo();
     sellTipinfo: Tipinfo = new Tipinfo();
     buyTipinfo: Tipinfo = new Tipinfo();
 
@@ -243,6 +244,25 @@ export class TradeComponent implements OnInit {
         if (!address) return "";
         let len = address.length;
         return address.substr(0, 5) + "..." + address.substring(len - 3, len);
+    }
+    setGateway(gateway:string){
+        let address = this.gv.wallet.address;
+        let trust = {
+            currency: "CNY",
+            counterparty: gateway,
+            limit: "1000000000",
+            ripplingDisabled: true,
+            frozen: false
+        };
+        this.ripple.setTrustline(address, trust).subscribe(result => {
+            console.log(result);
+            if(result.ok){
+                this.tipinfo.showSuccess("增加网关交易市场成功",3);
+                setTimeout(()=>{this.getTrustlines(this.gv.wallet.address);},10000);
+            }else{
+                this.tipinfo.showDanger("增加网关交易市场失败："+result.data.resultCode + "  " + result.data.resultMessage,6);
+            }
+        })
     }
 }
 

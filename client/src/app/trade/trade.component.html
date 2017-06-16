@@ -157,5 +157,20 @@
 </ng-container>
 
 <ng-container *ngIf="!haveTrustline">
-没有信任链
+    <div class="card">
+        <div class="card-header">
+            尚未信任网关，需要信任一家网关交易市场
+        </div>
+        <div class="card-block">
+            <h4 class="card-title">网关，是Ripple支付网络内置去中心化交易市场</h4>
+            <p class="card-text">国内，目前有两个人民币网关，点击下面按钮，选择一个网关作为自己的交易市场。</p>
+            <button class="btn btn-primary" (click)="setGateway('rKiCet8SdvWxPXnAgYarFUXMh1zCPz432Y')">ripplefox.razqQKzJRdB4UxFPWf5NEpEG3WMkmwgcXA</button>
+            <button class="btn btn-primary" (click)="setGateway('razqQKzJRdB4UxFPWf5NEpEG3WMkmwgcXA')">RippleChina.razqQKzJRdB4UxFPWf5NEpEG3WMkmwgcXA</button>
+        </div>
+    </div>
+    <div  class="form-inline">
+        <div class="alert" role="alert" *ngIf="tipinfo.isVisble" [ngClass]="tipinfo.class">
+            {{tipinfo.text}}
+        </div>
+    </div>
 </ng-container>

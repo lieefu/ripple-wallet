@@ -1,17 +1,24 @@
 <div class="container">
     <div class="card">
         <div class="card-header">
-            设置钱包名字
+            我的钱包
         </div>
         <div class="card-block">
-            <h4 class="card-title">{{gv.wallet.address}}</h4>
+            <h4 class="card-title">钱包地址：{{gv.wallet.address}}</h4>
             <p class="card-text">为这个Ripple钱包设置一个名字，方便自己记忆区分</p>
             <div class="form-inline">
                 <div class="input-group col">
-                    <div class="input-group-addon">名字:</div>
+                    <div class="input-group-addon">钱包名字:</div>
                     <input type="text" class="form-control" id="inlineFormInputGroup" [(ngModel)]="name" placeholder="设置一个钱包名字，方便自己记忆">
                 </div>
                 <button type="submit" class="btn btn-primary" (click)="setWalletName(name)">确定</button>
+            </div>
+            <br>
+            <div class="form-inline">
+                <div class="input-group col">
+                    <h6 class="card-title">私钥：{{secret_str}}</h6>
+                    <span style="color:blue;cursor:pointer" (click)="showSecret()">{{showsecret_label}}</span>
+                </div>
             </div>
         </div>
     </div>

@@ -266,6 +266,21 @@ router.get('/encryptwallet/:address/:password', (req, res) => {
 
 })
 //////////////////////////////////////
+router.get("/getTransactions/:address/:type",(req,res) =>{
+    let address = req.params.address;
+    let type = req.params.type;
+    //let options = req.body.options;
+    let options={
+        types:[type]
+    }
+    console.log("getTransactions",address,options);
+    //ripple lib getTransactions 不好用，不能用
+    ripple("getTransactions", address,options).then(info => {
+        resultOk(res, info);
+    }).catch(error => {
+        resultError(res, error);
+    })
+})
 router.post("/getOrderbook/:address/:limit", (req, res) => {
     let address = req.params.address;
     let limit = +req.params.limit;
