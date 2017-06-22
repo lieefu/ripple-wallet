@@ -14,8 +14,12 @@ export class WalletComponent implements OnInit {
 
     ngOnInit() {
         this.ripple.getWallets().subscribe(result =>{
-            this.wallets = result.data;
             console.log(result);
+            if(result.ok){
+              this.wallets = result.data;
+            }else{
+              this.createWallet();
+            }
         })
     }
     openWallet(address){
