@@ -1,4 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { Observable } from 'rxjs/Rx';
+import 'rxjs/add/operator/debounceTime';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/distinctUntilChanged';
 import { Router } from '@angular/router';
 import {RippleService} from '../ripple.service';
 import { GlobalVariable, Tipinfo} from '../global-variable';
@@ -38,9 +43,21 @@ export class WithdrawComponent implements OnInit {
 
     destination_tag:string;
     invoice_id:string;
+    recipientLabel = new FormControl();
     constructor(private ripple: RippleService, private gv: GlobalVariable, private router: Router) { }
 
     ngOnInit() {
+        this.recipientLabel.valueChanges
+        .debounceTime(900)
+        .distinctUntilChanged()
+        //.switchMap()
+        .subscribe(recipient=>{
+            console.log(recipient);
+            if(recipient){
+                this.resolveRecipient();
+            }
+
+        })
     }
     resolveRecipient(){
         console.log(this.recipient_label);

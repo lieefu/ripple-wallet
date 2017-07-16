@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule ,ReactiveFormsModule} from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 import {appRoutes} from './app.routes';
@@ -54,6 +54,7 @@ import { AdvancedComponent } from './advanced/advanced.component';
     RouterModule.forRoot(appRoutes),
     NgbModule.forRoot(),
     FormsModule,
+    ReactiveFormsModule,
     HttpModule
   ],
   providers: [RippleService,GlobalVariable],

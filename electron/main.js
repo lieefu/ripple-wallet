@@ -17,7 +17,7 @@ function createWindow() {
     mainWindow = new BrowserWindow({
         //show: false,
         width: 1200,
-        height: 900,
+        height: 800,
         backgroundColor: '#2e2c29'
     });
 

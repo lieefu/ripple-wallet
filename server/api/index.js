@@ -10,43 +10,44 @@ router.get('/', (req, res) => {
     resultOk(res, 'api works,ok');
 });
 /////////////////////////////////////
-router.post("/reconnect",(req,res) =>{
-    let url=req.body.url;
-    Ripple.reconnect(url).then(info =>{
-        resultOk(res,info);
-    }).catch(err =>{
-        resultError(res,err);
+router.post("/reconnect", (req, res) => {
+    let url = req.body.url;
+    Ripple.reconnect(url).then(info => {
+        resultOk(res, info);
+    }).catch(err => {
+        resultError(res, err);
     })
 })
 //////////////////////////////////////
-function readFile(filename,req,res,okmsg,errmsg){
+function readFile(filename, req, res, okmsg, errmsg) {
     fs.readFile(filename, "utf-8", (err, data) => {
         if (err) {
             console.log(errmsg);
-            return resultError(res,errmsg)
+            return resultError(res, errmsg)
         } else {
             return resultOk(res, JSON.parse(data));
         }
     });
 }
-router.get("/getconfig",(req,res) =>{
+router.get("/getconfig", (req, res) => {
     let filename = config.dataPath + "config.json";
-    readFile(filename,req,res,"","配置文件未找到");
+    readFile(filename, req, res, "", "配置文件未找到");
 })
-router.post("/saveconfig",(req,res) =>{
+router.post("/saveconfig", (req, res) => {
     let configdata = req.body.data;
     let filename = config.dataPath + "config.json";
-    saveFile(filename,configdata,req,res,"配置数据保存成功","配置数据数据保存失败！");
+    saveFile(filename, configdata, req, res, "配置数据保存成功", "配置数据数据保存失败！");
 })
 router.get("/getdata", (req, res) => {
     let filename = config.walletPath + "data.txt";
-    readFile(filename,req,res);
+    readFile(filename, req, res);
 });
-function  saveFile(filename,data,req,res,okmsg,errmsg){
+
+function saveFile(filename, data, req, res, okmsg, errmsg) {
     fs.writeFile(filename, JSON.stringify(data), function(err) {
         if (err) {
-            return resultError(res,  errmsg+ err);
-        }else{
+            return resultError(res, errmsg + err);
+        } else {
             return resultOk(res, okmsg);
         }
     });
@@ -55,7 +56,7 @@ router.post('/savedata', (req, res) => {
     //console.log(config.walletPath);
     let walletdata = req.body.data;
     let filename = config.walletPath + "data.txt";
-    saveFile(filename,walletdata,req,res,"联系人等数据保存成功","联系人等数据保存失败！");
+    saveFile(filename, walletdata, req, res, "联系人等数据保存成功", "联系人等数据保存失败！");
 })
 //////////////////////////////////////
 /**
@@ -110,7 +111,7 @@ router.get('/getwallets', (req, res) => {
         .then(files => {
             files.forEach((file, index) => {
                 //console.log("item", index, "data: ", file.data);
-                let data=JSON.parse(file.data);
+                let data = JSON.parse(file.data);
                 if (data.address) {
                     let wallet = {};
                     wallet.address = data.address;
@@ -132,7 +133,7 @@ router.get("/getwallet/:address", (req, res) => {
     fs.readFile(filename, "utf-8", (err, data) => {
         if (err) {
             return resultError(res, "钱包文件不存在");
-        }else{
+        } else {
             let wallet = JSON.parse(data);
             req.session.wallet = wallet;
             return resultOk(res, wallet);
@@ -266,16 +267,16 @@ router.get('/encryptwallet/:address/:password', (req, res) => {
 
 })
 //////////////////////////////////////
-router.get("/getTransactions/:address/:type",(req,res) =>{
+router.get("/getTransactions/:address/:type", (req, res) => {
     let address = req.params.address;
     let type = req.params.type;
     //let options = req.body.options;
-    let options={
-        types:[type]
+    let options = {
+        types: [type]
     }
-    console.log("getTransactions",address,options);
+    console.log("getTransactions", address, options);
     //ripple lib getTransactions 不好用，不能用
-    ripple("getTransactions", address,options).then(info => {
+    ripple("getTransactions", address, options).then(info => {
         resultOk(res, info);
     }).catch(error => {
         resultError(res, error);
