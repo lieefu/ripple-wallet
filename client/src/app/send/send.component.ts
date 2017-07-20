@@ -15,6 +15,8 @@ export class SendComponent implements OnInit {
     invoiceID:string;
     showTag:boolean=false;
     showTagInfo:string ="+";
+    showloading:boolean = false;
+    loading:string;
     ngOnDestroy() {
         if(this.timer) clearInterval(this.timer);
         this.timer = null;
@@ -46,7 +48,11 @@ export class SendComponent implements OnInit {
         this.destination_address = this.recipient_label;
         this.isShowAmount = false;
         this.tipinfo_payment = "";
+        this.showloading = true;
+        this.loading = "正在解析接收方地址信息";
         this.ripple.getTrustlines(this.destination_address).subscribe(result => {
+            this.showloading = false;
+            this.loading = "";
             if (result.ok) {
                 console.log(result);
                 const trustlines = result.data;
@@ -106,7 +112,9 @@ export class SendComponent implements OnInit {
                 }
             };
             this.tipinfo = ` 转账/付款：“${this.Amount.value}${this.Amount.currency}” 到对方钱包地址：“${this.destination_address}” `;
-            if (!this.timer) this.timer = setInterval(() => { this.findPaths(); }, 10000);
+            if (!this.timer) this.timer = setInterval(() => { this.findPaths(); }, 10000);            
+            this.showloading = true;
+            this.loading = "正在计算获取支付方式";
             this.findPaths();
         } else {
             this.tipinfo = "请输入发送数量";
@@ -115,6 +123,8 @@ export class SendComponent implements OnInit {
     findPaths() {
         console.log("find paths", this.pathfind);
         this.ripple.getPaths(this.pathfind).subscribe(result => {
+            this.showloading = false;
+            this.loading = "";
             //console.log(result);
             if (result.ok) {
                 this.paths = result.data;
@@ -153,8 +163,12 @@ export class SendComponent implements OnInit {
             "data": encodeURIComponent(this.memo) //decodeURIComponent
         }
         if(this.invoiceID) payment.invoiceID = this.invoiceID;
+        this.showloading = true;
+        this.loading = "正在向接收方转账/汇款";
         this.ripple.sendPayment(payment).subscribe(result =>{
             console.log(result);
+            this.showloading = false;
+            this.loading = "";
             if(result.ok){
                 this.isShowAmount = false;
                 this.tipinfo_payment = "转账/汇款 成功";

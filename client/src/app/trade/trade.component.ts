@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import {RippleService} from '../ripple.service';
+import { RippleService } from '../ripple.service';
 import { GlobalVariable, Tipinfo } from '../global-variable';
 
 @Component({
@@ -29,6 +29,7 @@ export class TradeComponent implements OnInit {
     sell_quantity: number;
     sell_price: number;
     sell_totalPrice: number;
+
     orderbook: Orderbook = new Orderbook();
     buys: Array<MyOrder> = new Array();
     sells: Array<MyOrder> = new Array();
@@ -88,7 +89,6 @@ export class TradeComponent implements OnInit {
         this.getOrderbook();
         if(!this.timer1) this.timer1 = setInterval(() => { this.getOrderbook() }, 10000);
         console.log(this.orderbook);
-
     }
     getTrustlines(address) {
         this.ripple.getTrustlines(address).subscribe(result => {

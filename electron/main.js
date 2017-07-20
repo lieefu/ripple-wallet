@@ -14,10 +14,12 @@ let mainWindow;
 
 function createWindow() {
     // Create the browser window.
+    console.log(process.resourcesPath + '/ripple.ico');
     mainWindow = new BrowserWindow({
         //show: false,
         width: 1200,
         height: 800,
+        icon: process.resourcesPath + '/ripple.ico',
         backgroundColor: '#2e2c29'
     });
 
