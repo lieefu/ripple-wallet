@@ -1,4 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { Observable } from 'rxjs/Rx';
+import 'rxjs/add/operator/debounceTime';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/distinctUntilChanged';
+import 'rxjs/add/operator/filter';
 import { Router } from '@angular/router';
 import {RippleService} from '../ripple.service';
 import { GlobalVariable } from '../global-variable';
@@ -17,12 +23,6 @@ export class SendComponent implements OnInit {
     showTagInfo:string ="+";
     showloading:boolean = false;
     loading:string;
-    ngOnDestroy() {
-        if(this.timer) clearInterval(this.timer);
-        this.timer = null;
-        console.log("SendComponent ngOnDestroy");
-    }
-    constructor(private ripple: RippleService, private gv: GlobalVariable, private router: Router) { }
     tipinfo: string;
     tipinfo_path:string;
     tipinfo_payment:string;
@@ -41,11 +41,43 @@ export class SendComponent implements OnInit {
     isShowAmount: boolean = false;
     isShowSendXRPbtn: boolean = false;
     isShowPaths: boolean = false;
+    isShowRecipientHelp: boolean = false;
+    recipient_help:string = "";
+    ngOnDestroy() {
+        if(this.timer) clearInterval(this.timer);
+        this.timer = null;
+        console.log("SendComponent ngOnDestroy");
+    }
+    recipientInput = new FormControl();
+    constructor(private ripple: RippleService, private gv: GlobalVariable, private router: Router) { }
     ngOnInit() {
+        this.recipientInput.valueChanges
+            .filter(recipient => {
+                this.destination_address="";
+                return true;
+            })
+            .debounceTime(900)
+            //.distinctUntilChanged()
+            //.switchMap()
+            .subscribe(recipient => {
+                console.log(recipient);
+                this.resolveRecipient();
+            })
+    }
+    returnRecipient(){
+        console.log(this.destination_address,this.destination_address!="");
+        if(this.destination_address!="") return;
+        this.resolveRecipient();
     }
     resolveRecipient() {
         console.log(this.recipient_label);
-        this.destination_address = this.recipient_label;
+        this.destination_address = this.gv.getAddress(this.recipient_label);
+        if(this.destination_address!=this.recipient_label){
+            this.isShowRecipientHelp = true;
+            this.recipient_help = this.destination_address;
+        }else{
+            this.isShowRecipientHelp = false;
+        }
         this.isShowAmount = false;
         this.tipinfo_payment = "";
         this.showloading = true;
@@ -53,8 +85,8 @@ export class SendComponent implements OnInit {
         this.ripple.getTrustlines(this.destination_address).subscribe(result => {
             this.showloading = false;
             this.loading = "";
+            console.log(result);
             if (result.ok) {
-                console.log(result);
                 const trustlines = result.data;
                 this.currencies = [];
                 for (let i = 0; i < trustlines.length; i++) {
@@ -72,10 +104,11 @@ export class SendComponent implements OnInit {
                     this.currencies = [];
                     this.isShowAmount = true;
                 } else {
+                    this.isShowRecipientHelp = true;
                     if (result.data.name == "TimeoutError") {
-                        this.tipinfo = "超时错误，请稍后再试！";
+                        this.recipient_help = "超时错误，请稍后再试！";
                     } else {
-                        this.tipinfo = "钱包地址格式错误。";
+                        this.recipient_help = "钱包地址格式错误。"+this.destination_address;
                     }
                 };
             }
@@ -112,7 +145,7 @@ export class SendComponent implements OnInit {
                 }
             };
             this.tipinfo = ` 转账/付款：“${this.Amount.value}${this.Amount.currency}” 到对方钱包地址：“${this.destination_address}” `;
-            if (!this.timer) this.timer = setInterval(() => { this.findPaths(); }, 10000);            
+            if (!this.timer) this.timer = setInterval(() => { this.findPaths(); }, 10000);
             this.showloading = true;
             this.loading = "正在计算获取支付方式";
             this.findPaths();

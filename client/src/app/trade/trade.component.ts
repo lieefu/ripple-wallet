@@ -60,17 +60,10 @@ export class TradeComponent implements OnInit {
         this.getMyOrders();
         this.timer2 = setInterval(() => { this.getMyOrders() }, 60000);
         let tradeparestr=this.gv.wallet.tradepares[0];
-        this.ripple.getdata().subscribe(result =>{
-            console.log(result);
-            if(result.ok){
-                this.gv.data.contacts = result.data.contacts;
-                this.gv.data.tradepare = result.data.tradepare||{};
-                if(this.gv.data.tradepare.hasOwnProperty(this.gv.wallet.address)){
-                    tradeparestr=this.gv.data.tradepare[this.gv.wallet.address];
-                }
-            }
-            this.parseTradepare(tradeparestr);
-        })
+        if(this.gv.data.tradepare.hasOwnProperty(this.gv.wallet.address)){
+            tradeparestr=this.gv.data.tradepare[this.gv.wallet.address];
+        }
+        this.parseTradepare(tradeparestr);
     }
     parseTradepare(tradeparestr) {
         console.log(tradeparestr);

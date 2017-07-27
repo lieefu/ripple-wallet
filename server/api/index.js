@@ -276,6 +276,7 @@ router.get("/getTransactions/:address/:type", (req, res) => {
     }
     console.log("getTransactions", address, options);
     //ripple lib getTransactions 不好用，不能用
+    //getTransactions/rGCCp6yGDFNPGKr1mViVA7TrDVRpa9GYYi/payment 结果是 {"ok":false,"data":{"name":"MissingLedgerHistoryError","message":"Server is missing ledger history in the specified range"}}
     ripple("getTransactions", address, options).then(info => {
         resultOk(res, info);
     }).catch(error => {

@@ -8,6 +8,27 @@ export class GlobalVariable {
     walletIsActive:boolean=false;
     data: WalletData = new WalletData();
     constructor() { }
+    getAddressAndName(key:string):string{
+        let account=this.data.getContact(key);
+        if(account){
+            return account.address+"("+account.name+")";
+        }
+        return key;
+    }
+    getAddress(key:string):string{
+        let account=this.data.getContact(key);
+        if(account){
+            return account.address;
+        }
+        return key;
+    }
+    getName(key:string):string{
+        let account=this.data.getContact(key);
+        if(account){
+            return account.name;
+        }
+        return null;
+    }
 }
 class WalletData {
     contacts: Array<Contact> = [];
@@ -34,9 +55,9 @@ class WalletData {
         }
         return false;
     }
-    getContact(name:string):Contact{
+    getContact(key:string):Contact{
         for (let i = 0; i < this.contacts.length; i++) {
-            if (name == this.contacts[i].name) return this.contacts[i];
+            if (key == this.contacts[i].name || key == this.contacts[i].address) return this.contacts[i];
         }
         return null;
     }

@@ -23,6 +23,13 @@ export class BalanceComponent implements OnInit {
             this.router.navigate(['']);
             return;
         }
+        this.ripple.getdata().subscribe(result => {
+            console.log(result);
+            if (result.ok) {
+                this.gv.data.contacts = result.data.contacts;
+                this.gv.data.tradepare = result.data.tradepare||{};
+            }
+        })
         this.loadingtip = "正在链接Ripple网络，请稍后...";
         this.loadingBalance = true;
         this.ripple.accountinfo(this.gv.wallet.address).subscribe(result =>{

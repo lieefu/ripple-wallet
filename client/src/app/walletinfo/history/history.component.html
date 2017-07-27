@@ -1,4 +1,21 @@
+<div class="container">
+    <br>
+    <div class="row gridhead">
+        <div class="col-md-3" style="text-align:center">交易时间</div>
+        <div class="col-md-1" style="text-align:center">类型</div>
+        <div class="col-md-2" style="text-align:right">额度</div>
+        <div class="col-md" style="text-align:center">对方地址</div>
+    </div>
+    <div class="row" *ngFor="let trade of trades,let index=index" [class.odd]="index%2==0" [class.even]="index%2==1">
+        <div class="col-md-3" style="text-align:left">{{trade.date | date:'yyyy-MM-dd HH:mm:ss'}} </div>
+        <div class="col-md-1" style="text-align:center">{{trade.action}}</div>
+        <div class="col-md-2" style="text-align:right">{{trade.amount}}{{trade.currency}}</div>
+        <div class="col-md" style="text-align:left">{{trade.address}}</div>
+    </div>
+</div>
 <div align="center" *ngIf="loading">
     <img src="assets/img/ripplelogo.png" class="loading">{{loadingtip}}
 </div>
-{{marker}}
+<div align="center" *ngIf="marker">
+    <span  (click)="getmoretrade(marker);" style="cursor:pointer">获取更多交易数据...</span>
+</div>

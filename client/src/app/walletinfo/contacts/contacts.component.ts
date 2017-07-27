@@ -14,15 +14,7 @@ export class ContactsComponent implements OnInit {
     isExist: boolean = false;
     constructor(private ripple: RippleService, private gv: GlobalVariable, private router: Router) { }
 
-    ngOnInit() {
-        this.ripple.getdata().subscribe(result => {
-            console.log(result);
-            if (result.ok) {
-                this.gv.data.contacts = result.data.contacts;
-                this.gv.data.tradepare = result.data.tradepare;
-            }
-        })
-    }
+    ngOnInit() {}
     setAddress(name: string) {
         console.log(name);
         this.isExist = this.gv.data.existName(name);

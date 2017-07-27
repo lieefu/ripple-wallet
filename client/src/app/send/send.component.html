@@ -1,7 +1,9 @@
 <div class="container">
     <div class="form-group">
         <label for="recipient_label">接收方：</label>
-        <input type="text" class="form-control" id="recipient_label" [(ngModel)]="recipient_label" placeholder="输入接收方钱包地址或者联系人名字" (focusout)="resolveRecipient();">
+        <input type="text" class="form-control" id="recipient_label" aria-describedby="recipientHelp" [formControl]="recipientInput" [(ngModel)]="recipient_label" placeholder="输入接收方钱包地址或者联系人名字"
+         (focusout)="returnRecipient();">
+        <small id="recipientHelp" class="form-text text-muted" *ngIf="isShowRecipientHelp">{{recipient_help}}</small>
     </div>
     <br>
     <div class="form-group" *ngIf="isShowAmount">
