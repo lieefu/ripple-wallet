@@ -1,3 +1,43 @@
-<p>
-  deposit works!
-</p>
+<div class="container">
+    <ng-container *ngIf="isRipplechina">
+        <h1>RippleChina网关充值方法</h1>
+        <h3>支付宝充值</h3>
+        使用手机支付宝向 gaoxuan5121@126.com 发起转账(姓名校验为 高轩)。（请不要直接扫码付，请点“转账”，并手动输入账号，），并在备注中填写你的钱包地址(注意：使用银行卡付款不占用支付宝的转账额度,请使用银行卡进行付款。姓名验证为 高轩)。
+        <h3>银行卡充值</h3>
+        如果您支付宝额度不够，或想充值较大额度，请直接联系客服（qq：2834432396），RippleChina网关将为您开启银行卡直接转账充值通道，充值前请与客服确认相关信息
+        <br><br><br>
+        <a href="http://wg.iripplechina.com/chongzhi/" target="_blank">更准确详细的充值方法,请移步RippleChina官网</a>
+    </ng-container>
+    <ng-container *ngIf="isRipplefox">
+        <h1>RippleFox网关充值方法</h1>
+        <h3>淘宝网店充值</h3>
+        通过瑞狐网关的淘宝网店，购买网店宝贝方式充值。
+        <a href="https://shop109149722.taobao.com/" target="_blank">瑞狐网关店</a>
+        <a href="https://ripplefox.taobao.com/" target="_blank">瑞狐上海店</a>
+        <br><br><br>
+        <a href="https://ripplefox.com/cny/deposit" target="_blank">更准确详细的充值方法,请移步RippleFox官网</a>
+    </ng-container>
+    <ng-container *ngIf="isNoGateway">
+        <div class="card">
+            <div class="card-header">
+                需要信任一个网关交易市场
+            </div>
+            <div class="card-block">
+                <h4 class="card-title">网关，是Ripple支付网络内置去中心化交易市场</h4>
+                <p class="card-text">国内目前有两个人民币网关，点击下面按钮，选择一个网关作为自己的交易市场。
+                    如果需要增加其它网关支持，请发送电子邮件: lieefu@gmail.com</p>
+                <button class="btn btn-primary" (click)="setGateway('razqQKzJRdB4UxFPWf5NEpEG3WMkmwgcXA')">一键信任RippleChina网关：RippleChina.razqQKzJRdB4UxFPWf5NEpEG3WMkmwgcXA</button>
+                <br><br>
+                <button class="btn btn-primary" (click)="setGateway('rKiCet8SdvWxPXnAgYarFUXMh1zCPz432Y')">一键信任RippleFox网关：ripplefox.rKiCet8SdvWxPXnAgYarFUXMh1zCPz432Y</button>
+                <br><br><br>
+                <a href="https://ripplefox.com/" target="_blank">RippleFox官网</a>
+                <a href="http://wg.iripplechina.com/" target="_blank">RippleChina官网</a>
+            </div>
+        </div>
+        <div  class="form-inline">
+            <div class="alert" role="alert" *ngIf="tipinfo.isVisble" [ngClass]="tipinfo.class">
+                {{tipinfo.text}}
+            </div>
+        </div>
+    </ng-container>
+</div>

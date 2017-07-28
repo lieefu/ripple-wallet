@@ -24,7 +24,7 @@ function createWindow() {
     });
 
     // and load the index.html of the app.
-    mainWindow.loadURL('http://localhost:3000');
+    mainWindow.loadURL('http://localhost:3618');
 
     // Open the DevTools.
     //mainWindow.webContents.openDevTools();
@@ -38,7 +38,12 @@ function createWindow() {
     });
     mainWindow.once('ready-to-show', () => {
         mainWindow.show()
-    })
+    });
+    //https://stackoverflow.com/questions/32402327/how-can-i-force-external-links-from-browser-window-to-open-in-a-default-browser/32427579#32427579
+    mainWindow.webContents.on('new-window', function(e, url) {//界面中点击url，使用系统默认浏览器打开
+        e.preventDefault();
+        require('electron').shell.openExternal(url);
+    });
 }
 
 // This method will be called when Electron has finished

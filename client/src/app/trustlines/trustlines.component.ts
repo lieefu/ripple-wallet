@@ -11,6 +11,7 @@ import { GlobalVariable, Tipinfo } from '../global-variable';
 export class TrustlinesComponent implements OnInit {
     tipinfo: Tipinfo = new Tipinfo();
     loadingTrustline:boolean = false;
+    trustlines:any=[];
     constructor(private ripple: RippleService, private gv: GlobalVariable, private router: Router) { }
 
     ngOnInit() {
@@ -25,8 +26,17 @@ export class TrustlinesComponent implements OnInit {
                 this.gv.wallet.trustlines = result.data;
                 this.gv.wallet.tradepares = this.ripple.trustline2Tradepairs(result.data);
                 console.log(this.gv.wallet.tradepares);
+                this.getMyTrustlines(this.gv.wallet.trustlines);
             }
         })
+    }
+    getMyTrustlines(trustlines){
+        for(let i=0;i<trustlines.length;i++){
+            let trustline = trustlines[i];
+            if(trustline.specification.limit>0||trustline.state.balance>0){//trustline.specification.limit==0 trustline.counterparty.limit>0 是被别人信任了
+                this.trustlines.push(trustline);
+            }
+        }
     }
     addTrustline(trustlinestr: string) {
         if (trustlinestr) {

@@ -7,6 +7,7 @@ export class GlobalVariable {
     wallet: any;
     walletIsActive:boolean=false;
     data: WalletData = new WalletData();
+    regexp :any = /^r[rpshnaf39wBUDNEGHJKLM4PQRST7VWXYZ2bcdeCg65jkm8oFqi1tuvAxyz]{27,35}$/;
     constructor() { }
     getAddressAndName(key:string):string{
         let account=this.data.getContact(key);
@@ -20,7 +21,7 @@ export class GlobalVariable {
         if(account){
             return account.address;
         }
-        return key;
+        return null;
     }
     getName(key:string):string{
         let account=this.data.getContact(key);

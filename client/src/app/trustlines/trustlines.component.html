@@ -1,7 +1,7 @@
 <div align="center" *ngIf="loadingTrustline">
     <img src="assets/img/ripplelogo.png" class="loading">正在获取信任链数据...
 </div>
-<app-trustline *ngFor="let trustline of gv.wallet.trustlines" [trustline]="trustline"></app-trustline>
+<app-trustline *ngFor="let trustline of trustlines" [trustline]="trustline"></app-trustline>
 <div class="container">
     <div class="card">
         <div class="card-header">

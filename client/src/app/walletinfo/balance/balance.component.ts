@@ -40,6 +40,7 @@ export class BalanceComponent implements OnInit {
                 this.accountinfo = this.gv.wallet.accountinfo= result.data;
                 this.getBalances(this.gv.wallet.address);
             }else{
+                this.gv.walletIsActive = false;
                 if(result.data.name == "TimeoutError" || result.data.name=="NotConnectedError"){
                     this.title="链接Ripple网络超时，请稍后再试！" ;
                 }else{
@@ -57,7 +58,13 @@ export class BalanceComponent implements OnInit {
             if(result.ok){
                 this.loadingBalance = false;
                 this.title = "";
-                this.gv.wallet.balances = result.data;
+                this.gv.wallet.balances = [];
+                for(let i=0;i<result.data.length;i++){
+                    let balance=result.data[i];
+                    if(balance.value!=0){
+                        this.gv.wallet.balances.push(balance);
+                    }
+                }
                 console.log(this.gv.wallet.balances);
             }else{
                 this.title = result.data;

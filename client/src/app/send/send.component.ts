@@ -53,8 +53,15 @@ export class SendComponent implements OnInit {
     ngOnInit() {
         this.recipientInput.valueChanges
             .filter(recipient => {
-                this.destination_address="";
-                return true;
+                this.isShowRecipientHelp = false;
+                if(!recipient) return false;
+                this.destination_address = this.gv.getAddress(this.recipient_label);
+                if(this.destination_address) return true;
+                if(this.gv.regexp.test(this.recipient_label)) {
+                    this.destination_address=this.recipient_label;
+                    return true;
+                }
+                return false;
             })
             .debounceTime(900)
             //.distinctUntilChanged()
@@ -66,18 +73,12 @@ export class SendComponent implements OnInit {
     }
     returnRecipient(){
         console.log(this.destination_address,this.destination_address!="");
-        if(this.destination_address!="") return;
+        if(this.destination_address) return;
+        this.destination_address=this.recipient_label;
         this.resolveRecipient();
     }
     resolveRecipient() {
-        console.log(this.recipient_label);
-        this.destination_address = this.gv.getAddress(this.recipient_label);
-        if(this.destination_address!=this.recipient_label){
-            this.isShowRecipientHelp = true;
-            this.recipient_help = this.destination_address;
-        }else{
-            this.isShowRecipientHelp = false;
-        }
+        console.log(this.recipient_label,this.destination_address);
         this.isShowAmount = false;
         this.tipinfo_payment = "";
         this.showloading = true;
@@ -97,6 +98,12 @@ export class SendComponent implements OnInit {
                     this.currencies.push(currency);
                 }
                 this.isShowAmount = true;
+                if(this.recipient_label!=this.destination_address){
+                    this.isShowRecipientHelp = true;
+                    this.recipient_help = "接收方钱包地址："+this.destination_address;
+                }else{
+                    this.isShowRecipientHelp = false;
+                }
                 console.log(this.currencies);
             } else {
                 if (result.data.message == "actNotFound") {
@@ -108,7 +115,7 @@ export class SendComponent implements OnInit {
                     if (result.data.name == "TimeoutError") {
                         this.recipient_help = "超时错误，请稍后再试！";
                     } else {
-                        this.recipient_help = "钱包地址格式错误。"+this.destination_address;
+                        this.recipient_help = "钱包地址错误，"+this.destination_address;
                     }
                 };
             }
