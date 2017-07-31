@@ -48,7 +48,28 @@
 <!-- 底部区域 -->
 <footer class="navbar navbar-light bg-faded">
     <div class="container">
-        <p>Designed and built by the <a href="http://www.lieefu.com" target="_blank">Lieefu Way</a>, My Email: <a href="mailto:lieefu@gmail.com">lieefu@gmail.com</a>
-        </p>
+        <div class="row">
+            <div class="col-md-12" align="center">Version {{version}}
+                <a class="btn btn-large" href="https://github.com/lieefu/ripple-wallet" target="_blank"><i class="fa fa-github fa-1x"></i> View on GitHub  </a> MyEmail: <a href="mailto:lieefu@gmail.com">lieefu@gmail.com</a>
+                QQ群:56937187<i class="fa fa-qq fa-1x"></i> 微博:<a href="http://weibo.com/207899158" target="_blank"><i class="fa fa-weibo fa-1x"></i>瑞波支付</a>
+            </div>
+        </div>
     </div>
 </footer>
+
+<ng-template #alertcontent let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">发现新版本</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>{{msg}}</p>
+    <p>当前版本{{version}},新版本{{newversion}}</p>
+    <a href="{{url}}" target="_blank">{{url}}</a>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="c('Close click')">知道了</button>
+  </div>
+</ng-template>

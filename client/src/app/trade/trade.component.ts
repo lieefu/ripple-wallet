@@ -58,7 +58,7 @@ export class TradeComponent implements OnInit {
         this.haveTrustline=true;
         this.initBookOrders();
         this.getMyOrders();
-        this.timer2 = setInterval(() => { this.getMyOrders() }, 60000);
+        this.timer2 = setInterval(() => { this.getMyOrders() }, 21000);
         let tradeparestr=this.gv.wallet.tradepares[0];
         if(this.gv.data.tradepare.hasOwnProperty(this.gv.wallet.address)){
             tradeparestr=this.gv.data.tradepare[this.gv.wallet.address];

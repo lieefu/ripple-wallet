@@ -64,6 +64,10 @@ export class RippleService {
         return this.httpGet('api/decryptwallet/' + address + "/" + password);
     }
     //////////////////////////////////
+    getLastVersion(){
+        return this.httpGet(`http://lieefu.com/api/ripplewallet/version`);//&descending=true
+
+    }
     accountinfo(address) {
         return this.httpGet("api/accountinfo/" + address);
     }
