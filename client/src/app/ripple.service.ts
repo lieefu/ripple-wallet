@@ -5,11 +5,11 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 @Injectable()
 export class RippleService {
-    trustline2Tradepairs(trustlines){
+    trustline2Tradepairs(trustlines) {
         console.log(trustlines);
-        let tradepares=[];
-        for(let i=0;i<trustlines.length;i++){
-            let trustline=trustlines[i];
+        let tradepares = [];
+        for (let i = 0; i < trustlines.length; i++) {
+            let trustline = trustlines[i];
             tradepares.push(`XRP./${trustline.specification.currency}.${trustline.specification.counterparty}`)
         }
         return tradepares;
@@ -17,27 +17,27 @@ export class RippleService {
 
     ////////////////////////////////////
     constructor(private http: Http) { }
-    reconnect(url){
-        return this.httpPost("api/reconnect",{url:url});
+    reconnect(url) {
+        return this.httpPost("api/reconnect", { url: url });
     }
     /////////
-    getconfig(){
+    getconfig() {
         return this.httpGet("api/getconfig");
     }
-    saveconfig(data){
-       console.log(data);
-        return this.httpPost("api/saveconfig",{data:data});
+    saveconfig(data) {
+        console.log(data);
+        return this.httpPost("api/saveconfig", { data: data });
     }
-    getdata(){
-      return this.httpGet("api/getdata");
+    getdata() {
+        return this.httpGet("api/getdata");
     }
-    savedata(data){
-       console.log(data);
-        return this.httpPost("api/savedata",{data:data});
+    savedata(data) {
+        console.log(data);
+        return this.httpPost("api/savedata", { data: data });
     }
     ///////////////////////
-    setWalletName(name:string){
-        return this.httpGet('api/setWalletName/'+name);
+    setWalletName(name: string) {
+        return this.httpGet('api/setWalletName/' + name);
     }
     getWallet(address): Observable<any> {
         return this.httpGet('api/getwallet/' + address);
@@ -64,7 +64,7 @@ export class RippleService {
         return this.httpGet('api/decryptwallet/' + address + "/" + password);
     }
     //////////////////////////////////
-    getLastVersion(){
+    getLastVersion() {
         return this.httpGet(`http://lieefu.com/api/ripplewallet/version`);//&descending=true
 
     }
@@ -77,27 +77,27 @@ export class RippleService {
     getTrustlines(address) {
         return this.httpGet("api/getTrustlines/" + address);
     }
-    getTransactions(address,type,limit){
+    getTransactions(address, type, limit) {
         //return this.httpGet("api/getTransactions/"+address+"/"+type);
         return this.httpGet(`https://data.ripple.com/v2/accounts/${address}/transactions?type=${type}&result=tesSUCCESS&limit=${limit}`);//&descending=true
         //&descending=true加入这个参数，时常报错：ripple.service.ts:146 500 - Internal Server Error {"result":"error","message":"unable to retrieve transactions"}
     }
-    getPayments(address,marker){
-        let markerstr="";
-        if(marker) markerstr="&marker="+marker;
+    getPayments(address, marker) {
+        let markerstr = "";
+        if (marker) markerstr = "&marker=" + marker;
         return this.httpGet(`https://data.ripple.com/v2/accounts/${address}/payments?descending=true${markerstr}`);
     }
-    getOrderbook(address,orderbook,limit){
-        return this.httpPost("api/getOrderbook/"+address+"/"+limit,{orderbook:orderbook});
+    getOrderbook(address, orderbook, limit) {
+        return this.httpPost("api/getOrderbook/" + address + "/" + limit, { orderbook: orderbook });
     }
-    getMyOrders(address){
-        return this.httpGet("api/getMyOrders/"+address);
+    getMyOrders(address) {
+        return this.httpGet("api/getMyOrders/" + address);
     }
-    addOrder(address,order){
-        return this.httpPost("api/addOrder/"+address,{order:order});
+    addOrder(address, order) {
+        return this.httpPost("api/addOrder/" + address, { order: order });
     }
-    cancellOrder(address,sequence){
-        return this.httpGet("api/cancellOrder/"+address+"/"+sequence);
+    cancellOrder(address, sequence) {
+        return this.httpGet("api/cancellOrder/" + address + "/" + sequence);
     }
     ///////////////////////////
     setTrustline(address, trust) {
@@ -109,20 +109,20 @@ export class RippleService {
     sendPayment(payment) {
         return this.httpPost('api/payment', { payment: payment });
     }
-    gateways={
-        ripplefox:{
-            federation_url:"https://ripplefox.com/bridge"
+    gateways = {
+        ripplefox: {
+            federation_url: "https://ripplefox.com/bridge"
         },
-        ripplechina:{
-            federation_url:"https://ripple.iripplechina.com/bridge"
+        ripplechina: {
+            federation_url: "https://ripple.iripplechina.com/bridge"
         }
     };
-    bridge(gateway, action,data) {
+    bridge(gateway, action, data) {
         let params: URLSearchParams = new URLSearchParams();
         params.set('type', action);
-        for(let key in data){
-            console.log(key,data[key]);
-            params.set(key,data[key]);
+        for (let key in data) {
+            console.log(key, data[key]);
+            params.set(key, data[key]);
         }
         return this.http.get(gateway.federation_url, { params: params })
             .map(this.extractData)
@@ -155,5 +155,26 @@ export class RippleService {
         }
         console.error(errMsg);
         return Observable.throw(errMsg);
+    }
+    //https://stackoverflow.com/questions/7717109/how-can-i-compare-arbitrary-version-numbers
+    cmpVersion(a, b) {
+        var i, cmp, len, re = /(\.0)+[^\.]*$/;
+        a = (a + '').replace(re, '').split('.');
+        b = (b + '').replace(re, '').split('.');
+        len = Math.min(a.length, b.length);
+        for (i = 0; i < len; i++) {
+            cmp = parseInt(a[i], 10) - parseInt(b[i], 10);
+            if (cmp !== 0) {
+                return cmp;
+            }
+        }
+        return a.length - b.length;
+    }
+
+    gteVersion(a, b) {
+        return this.cmpVersion(a, b) >= 0;
+    }
+    ltVersion(a, b) {
+        return this.cmpVersion(a, b) < 0;
     }
 }

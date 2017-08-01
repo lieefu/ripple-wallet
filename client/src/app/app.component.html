@@ -34,6 +34,7 @@
                 </ng-container>
             </ul>
             <form class="form-inline my-2 my-md-0">
+                <span class="badge badge-default" *ngIf="gv.wallet?.name">{{gv.wallet.name}}</span>
                 <span class="badge" *ngIf="gv.wallet" [ngClass]="{'badge-success':gv.connected,'badge-default':!gv.connected}">{{gv.wallet.address}}</span>
                 <span class="badge badge-default" *ngIf="gv.wallet?.isSecreted">P</span>
                 <span class="badge badge-default" *ngIf="gv.wallet?.isLocked">L</span>
@@ -50,8 +51,10 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12" align="center">Version {{version}}
-                <a class="btn btn-large" href="https://github.com/lieefu/ripple-wallet" target="_blank"><i class="fa fa-github fa-1x"></i> View on GitHub  </a> MyEmail: <a href="mailto:lieefu@gmail.com">lieefu@gmail.com</a>
-                QQ群:56937187<i class="fa fa-qq fa-1x"></i> 微博:<a href="http://weibo.com/207899158" target="_blank"><i class="fa fa-weibo fa-1x"></i>瑞波支付</a>
+                <a class="btn btn-large" href="https://github.com/lieefu/ripple-wallet" target="_blank"><i class="fa fa-github fa-1x"></i> View on GitHub  </a>
+                 MyEmail: <a href="mailto:lieefu@gmail.com">lieefu@gmail.com</a>
+                 网站: <a href="http://lieefu.com/ripplewallet" target="_blank">lieefu.com</a>
+                <i class="fa fa-qq fa-1x"></i>群:56937187 微博<i class="fa fa-weibo fa-1x"></i>:<a href="http://weibo.com/207899158" target="_blank">瑞波支付</a>
             </div>
         </div>
     </div>

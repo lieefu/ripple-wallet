@@ -44,7 +44,7 @@ export class BalanceComponent implements OnInit {
                 if(result.data.name == "TimeoutError" || result.data.name=="NotConnectedError"){
                     this.title="链接Ripple网络超时，请稍后再试！" ;
                 }else{
-                    this.title="该钱包未激活，请激活后使用";
+                    this.title="该钱包未激活，请激活后使用。新创建的钱包，需要至少20XRP才能激活。";
                 }
                 console.log(result);
             }

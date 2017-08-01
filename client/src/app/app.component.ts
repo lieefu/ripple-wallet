@@ -19,15 +19,13 @@ export class AppComponent implements OnInit {
     ngOnInit() {
         this.ripple.getLastVersion().subscribe(result=>{
             console.log(result);
-            //this.version="1.0.0";
-            if(result.ok&&result.version!=this.version){
+            if(result.ok&&this.ripple.ltVersion(this.version,result.version)){
                 this.msg=result.message;
                 this.url=result.url;
                 this.newversion = result.version;
                 this.open(this.alertcontent);
             }
         });
-
     }
     open(content) {
         this.modalService.open(content).result.then((result) => {
@@ -36,5 +34,4 @@ export class AppComponent implements OnInit {
             ;//this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
         });
     }
-
 }
