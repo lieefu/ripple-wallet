@@ -1,5 +1,5 @@
 <div class="container">
-    <h1 *ngIf="addresses?.length>0">选择打开已有钱包</h1> {{tipinfo}}
+    <h1 *ngIf="wallets?.length>0">选择打开已有钱包</h1> {{tipinfo}}
     <button type="button" class="btn btn-secondary btn-lg btn-block" *ngFor="let wallet of wallets" (click)="openWallet(wallet.address)">{{wallet.address}}{{wallet.name}}</button>
     <button type="button" class="btn btn-success btn-lg btn-block" (click)="createWallet()">创建新钱包</button>
 </div>

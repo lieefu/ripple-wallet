@@ -15,7 +15,7 @@ export class AdvancedComponent implements OnInit {
     secret_str:string="s**************************************";
     showsecret:boolean=false;
     showsecret_label:string="显示";
-    constructor(private ripple: RippleService, private gv: GlobalVariable, private router: Router) { }
+    constructor(private ripple: RippleService, public gv: GlobalVariable, private router: Router) { }
 
     ngOnInit() {
         this.name = this.gv.wallet.name;

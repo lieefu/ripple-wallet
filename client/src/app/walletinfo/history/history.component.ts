@@ -14,7 +14,7 @@ export class HistoryComponent implements OnInit {
     loading: boolean = false;
     loadingtip: string = "加载历史交易数据";
     trades: Array<Trade>=[];
-    constructor(private ripple: RippleService, private gv: GlobalVariable, private router: Router) { }
+    constructor(private ripple: RippleService, public gv: GlobalVariable, private router: Router) { }
     ngOnInit() {
         this.getPayments();
     }

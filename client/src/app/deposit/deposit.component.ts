@@ -13,7 +13,7 @@ export class DepositComponent implements OnInit {
     isRipplechina:boolean=false;
     isNoGateway:boolean=false;
     tipinfo: Tipinfo = new Tipinfo();
-    constructor(private ripple: RippleService, private gv: GlobalVariable, private router: Router) { }
+    constructor(private ripple: RippleService, public gv: GlobalVariable, private router: Router) { }
 
     ngOnInit() {
         if (this.gv.wallet.trustlines) {

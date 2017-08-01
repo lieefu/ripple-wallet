@@ -9,6 +9,6 @@ import { GlobalVariable } from '../global-variable';
     styleUrls: ['./walletinfo.component.css']
 })
 export class WalletinfoComponent implements OnInit {
-    constructor(private ripple: RippleService, private gv: GlobalVariable, private router: Router) { }
+    constructor(private ripple: RippleService, public gv: GlobalVariable, private router: Router) { }
     ngOnInit() { }
 }

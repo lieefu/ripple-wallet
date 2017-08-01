@@ -13,7 +13,7 @@ export class BalanceComponent implements OnInit {
     loadingtip:string;
     accountinfo:any;
     loadingBalance:boolean = false;
-    constructor(private ripple: RippleService, private gv: GlobalVariable, private router: Router) { }
+    constructor(private ripple: RippleService, public gv: GlobalVariable, private router: Router) { }
     ngOnInit() {
         console.log(this.gv.wallet);
         if(!this.gv.wallet){

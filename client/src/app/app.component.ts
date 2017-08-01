@@ -14,7 +14,7 @@ export class AppComponent implements OnInit {
     msg:string;
     @ViewChild('alertcontent')
     private alertcontent: TemplateRef<any>;
-    constructor(private ripple: RippleService,private gv: GlobalVariable, private modalService: NgbModal) {
+    constructor(private ripple: RippleService,public gv: GlobalVariable, private modalService: NgbModal) {
     }
     ngOnInit() {
         this.ripple.getLastVersion().subscribe(result=>{

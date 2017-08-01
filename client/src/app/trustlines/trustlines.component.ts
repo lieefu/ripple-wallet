@@ -12,7 +12,8 @@ export class TrustlinesComponent implements OnInit {
     tipinfo: Tipinfo = new Tipinfo();
     loadingTrustline:boolean = false;
     trustlines:any=[];
-    constructor(private ripple: RippleService, private gv: GlobalVariable, private router: Router) { }
+    turstlinestr:string;
+    constructor(private ripple: RippleService, public gv: GlobalVariable, private router: Router) { }
 
     ngOnInit() {
         this.loadingTrustline = true;

@@ -13,7 +13,7 @@ export class BrainwalletComponent implements OnInit {
     wallet: any;
     phrase: string;
     isSave: boolean = false;
-    constructor(private ripple: RippleService, private gv: GlobalVariable, private router: Router) { }
+    constructor(private ripple: RippleService, public gv: GlobalVariable, private router: Router) { }
 
     ngOnInit() { }
 

@@ -18,7 +18,7 @@ export class TradeComponent implements OnInit {
         this.timer1 = this.timer2 = null;
         console.log("TradeComponent ngOnDestroy");
     }
-    constructor(private ripple: RippleService, private gv: GlobalVariable, private router: Router) { }
+    constructor(private ripple: RippleService, public gv: GlobalVariable, private router: Router) { }
     asks: Array<BookOrder> = new Array();
     bids: Array<BookOrder> = new Array();
     limit: number = 10;

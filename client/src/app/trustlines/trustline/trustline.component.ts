@@ -14,7 +14,7 @@ export class TrustlineComponent implements OnInit {
     limit;
     ripplingDisabled: boolean;
     frozen: boolean;
-    constructor(private ripple: RippleService, private gv: GlobalVariable) { }
+    constructor(private ripple: RippleService, public gv: GlobalVariable) { }
 
     ngOnInit() {
         this.limit = this.trustline.specification.limit;

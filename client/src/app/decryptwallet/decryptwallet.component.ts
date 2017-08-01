@@ -10,7 +10,7 @@ import { GlobalVariable } from '../global-variable';
 export class DecryptwalletComponent implements OnInit {
     tipinfo: string;
     password: string;
-    constructor(private ripple: RippleService, private gv: GlobalVariable, private router: Router) { }
+    constructor(private ripple: RippleService, public gv: GlobalVariable, private router: Router) { }
 
     ngOnInit() {
     }

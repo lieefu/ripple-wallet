@@ -9,8 +9,8 @@ import { GlobalVariable } from '../global-variable';
 })
 export class WalletComponent implements OnInit {
     tipinfo:string;
-    wallets:Array<string>;
-    constructor(private ripple: RippleService, private gv: GlobalVariable, private router: Router) { }
+    wallets:Array<object>;
+    constructor(private ripple: RippleService, public gv: GlobalVariable, private router: Router) { }
 
     ngOnInit() {
         this.ripple.getWallets().subscribe(result =>{

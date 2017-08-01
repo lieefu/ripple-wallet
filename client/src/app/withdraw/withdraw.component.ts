@@ -48,7 +48,7 @@ export class WithdrawComponent implements OnInit {
     destination_tag: string;
     invoice_id: string;
     recipientInput = new FormControl();
-    constructor(private ripple: RippleService, private gv: GlobalVariable, private router: Router) { }
+    constructor(private ripple: RippleService, public gv: GlobalVariable, private router: Router) { }
 
     ngOnInit() {
         this.recipientInput.valueChanges

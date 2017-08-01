@@ -12,7 +12,7 @@ export class ContactsComponent implements OnInit {
     name: string;
     address: string;
     isExist: boolean = false;
-    constructor(private ripple: RippleService, private gv: GlobalVariable, private router: Router) { }
+    constructor(private ripple: RippleService, public gv: GlobalVariable, private router: Router) { }
 
     ngOnInit() {}
     setAddress(name: string) {
