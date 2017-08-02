@@ -191,20 +191,20 @@ export class WithdrawComponent implements OnInit {
     findPaths() {
         console.log("find paths", this.pathfind);
         this.showloading = true;
+        this.isShowPaths = false;
         this.loading = "计算需要向网关发送的提现资产数量和支付路径等信息";
         this.ripple.getPaths(this.pathfind).subscribe(result => {
             console.log(result);
             this.showloading = false;
+            this.isShowPaths = true;
             this.loading = "";
             if (result.ok) {
                 this.paths = result.data;
                 console.log("paths", this.paths);
-                this.isShowPaths = true;
                 this.tipinfo_path = `点击上面按钮，将发送按钮上标注的资产，接收方：${this.destination_address} 收到：${this.Amount.value}${this.Amount.currency}`;
             } else {
                 this.paths = [];
-                this.isShowPaths = false;
-                this.tipinfo_path = "";
+                this.tipinfo_path = "查询支付路径失败，可能是余额不足。";
             }
         })
     }
