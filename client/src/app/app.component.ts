@@ -8,7 +8,7 @@ import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
     styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-    version: string="1.0.0";
+    version: string="1.0.1";
     newversion:string;
     url:string;
     msg:string;

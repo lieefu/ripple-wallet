@@ -16,7 +16,7 @@ import { GlobalVariable } from '../global-variable';
 })
 export class SendComponent implements OnInit {
     timer;
-    tag:number;
+    destination_tag:string;
     memo:string;
     invoiceID:string;
     showTag:boolean=false;
@@ -37,7 +37,7 @@ export class SendComponent implements OnInit {
     pathfind: any;
     currencies = [];
     paths = [];
-    payment: any;
+    //payment: any;
     isShowAmount: boolean = false;
     isShowSendXRPbtn: boolean = false;
     isShowPaths: boolean = false;
@@ -122,7 +122,7 @@ export class SendComponent implements OnInit {
         });
     }
     setCurrency(currency, label) {
-        console.log(currency);
+        console.log("setCurrency:",currency);
         if (label) {
             this.Amount = {
                 currency: "XRP"
@@ -138,6 +138,7 @@ export class SendComponent implements OnInit {
         this.setValue(this.amount_value);
     }
     setValue(value) {
+        console.log("setValue:",value);
         if (value && value > 0) {
             this.paths = [];
             this.isShowSendXRPbtn = (this.Amount.currency == "XRP");
@@ -180,28 +181,29 @@ export class SendComponent implements OnInit {
     }
     sendXRP(value) {
         console.log("send", value, "XRP");
-        this.payment = {
+        let payment = {
             "source": {
                 "address": this.gv.wallet.address,
                 "maxAmount": this.pathfind.destination.amount
             },
-            "destination": this.pathfind.destination
+            "destination": Object.assign({}, this.pathfind.destination) //使用copy赋值，否则sendPayment 中增加tag 或者memos时，污染this.pathfind.destination
         };
-        this.sendPayment(this.payment);
+        this.sendPayment(payment);
     }
     sendIOU(path) {
         console.log("send", path);
-        this.payment = path;
-        this.sendPayment(this.payment);
+        //this.payment = path;
+        this.sendPayment(Object.assign({}, path));
     }
     sendPayment(payment) {
         console.log("payment:", payment);
-        if(this.tag) payment.destination.tag = this.tag;
-        if(this.memo) payment.memos={
+        if(this.destination_tag) payment.destination.tag = parseInt( this.destination_tag);
+        if(this.memo) payment.memos=[{
             "type": "rippleok.com",
             "format": "plain/text",
             "data": encodeURIComponent(this.memo) //decodeURIComponent
-        }
+        }];
+        console.log("payment",payment);
         if(this.invoiceID) payment.invoiceID = this.invoiceID;
         this.showloading = true;
         this.loading = "正在向接收方转账/汇款";
