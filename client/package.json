@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --proxy-config ./proxy.dev.conf.json",
     "build": "ng build --watch",
     "build-i18n": "for lang in zh en; do ng build --output-path=dist/$lang  --aot -prod --bh /$lang/ --i18n-file=src/i18n/messages.$lang.xlf --i18n-format=xlf --locale=$lang;  done",
     "test": "ng test",
