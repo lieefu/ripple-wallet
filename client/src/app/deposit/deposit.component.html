@@ -1,12 +1,22 @@
 <div class="container">
     <ng-container *ngIf="isRipplechina">
         <h1>RippleChina网关充值方法</h1>
-        <h3>支付宝充值</h3>
-        使用手机支付宝向 gaoxuan5121@126.com 发起转账(姓名校验为 高轩)。（请不要直接扫码付，请点“转账”，并手动输入账号，），并在备注中填写你的钱包地址(注意：使用银行卡付款不占用支付宝的转账额度,请使用银行卡进行付款。姓名验证为 高轩)。
-        <h3>银行卡充值</h3>
-        如果您支付宝额度不够，或想充值较大额度，请直接联系客服（qq：2834432396），RippleChina网关将为您开启银行卡直接转账充值通道，充值前请与客服确认相关信息
-        <br><br><br>
-        <a href="http://wg.iripplechina.com/chongzhi/" target="_blank">更准确详细的充值方法,请移步RippleChina官网</a>
+        <h3>1. 银行卡充值</h3>
+        如需大额充值，请直接联系客服qq:2834432396，我们将为您开启银行卡人工充值通道。
+        <h3>2. 支付宝充值</h3>
+        <p>
+        支付宝自动充值，2分钟内到账。
+        支付宝账号: cz@ripplechina.net( 验证姓氏为“葛”)
+        备         注: 你的ripple钱包地址( 如下图所示 )
+        <img src="http://wg.iripplechina.com/wp-content/uploads/2016/11/8888.jpg" width="200">
+        <br>
+        注意：<br>
+                1. 充值前，请确认您已经激活钱包，并已经信任网关( 具体做法请看 网关教程 )。<br>
+                2. 如果支付宝额度不够，请点击这里查看如何用支付宝大额充值，如果忘记备注或有其他疑问，请联系客服qq 2834432396。
+      </p>
+        <br><br>
+        <a href="http://wg.iripplechina.com/chongzhi/" target="_blank">充值方式经常发生变化，请随时查看RippleChina官网，点击此处引导至官网充值页面</a>
+
     </ng-container>
     <ng-container *ngIf="isRipplefox">
         <h1>RippleFox网关充值方法</h1>
@@ -24,13 +34,8 @@
             </div>
             <div class="card-block">
                 <h4 class="card-title">网关，是Ripple支付网络内置去中心化交易市场</h4>
-                <p class="card-text">国内目前有两个人民币网关，点击下面按钮，选择一个网关作为自己的交易市场。
-                    如果需要增加其它网关支持，请发送电子邮件: lieefu@gmail.com</p>
                 <button class="btn btn-primary" (click)="setGateway('razqQKzJRdB4UxFPWf5NEpEG3WMkmwgcXA')">一键信任RippleChina网关：RippleChina.razqQKzJRdB4UxFPWf5NEpEG3WMkmwgcXA</button>
                 <br><br>
-                <button class="btn btn-primary" (click)="setGateway('rKiCet8SdvWxPXnAgYarFUXMh1zCPz432Y')">一键信任RippleFox网关：ripplefox.rKiCet8SdvWxPXnAgYarFUXMh1zCPz432Y</button>
-                <br><br><br>
-                <a href="https://ripplefox.com/" target="_blank">RippleFox官网</a>
                 <a href="http://wg.iripplechina.com/" target="_blank">RippleChina官网</a>
             </div>
         </div>

@@ -7,7 +7,7 @@ if(process.resourcesPath){//run in electron 或者用 process.noAsar
 module.exports = {
     env: process.env.NODE_ENV,
     // Server port
-    port: process.env.PORT || 3618,
+    port: process.env.PORT || 3619,
     // Root path of server
     clientRoot: path.normalize(__dirname + '/../client'),
     dataPath:path.normalize(dirname + '/data/'),

@@ -1,6 +1,12 @@
 <div class="container">
     <div class="card-block">
         <h4 class="card-title">{{title}}</h4>
+        <ng-container *ngIf="!gv.walletIsActive">
+            <div style="text-align: left">
+            新创建的钱包，需要至少20XRP才能激活，31XRP可以正常使用，进行信任网关和挂单交易操作。<br>
+            激活方法：QQ群：56937187 有专职激活管理员，需要你提供Ripple钱包地址，你的钱包地址在本窗口右上角，鼠标选中后，ctrl+v 复制即可
+           </div>
+        </ng-container>
         <div align="center" *ngIf="loadingBalance">
             <img src="assets/img/ripplelogo.png" class="loading">{{loadingtip}}
         </div>

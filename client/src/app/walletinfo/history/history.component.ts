@@ -32,6 +32,7 @@ export class HistoryComponent implements OnInit {
                     trade.date = payment.executed_time;
                     trade.amount = payment.amount;
                     trade.currency = payment.currency;
+                    trade.txid = payment.tx_hash;
                     if(payment.source===this.gv.wallet.address){
                         trade.action="支付";
                         trade.address = payment.destination;
@@ -62,4 +63,5 @@ class Trade {
     address: string;//交易对方钱包地址
     amount: string;
     currency:string;
+    txid:string;
 }

@@ -1,8 +1,8 @@
 <div class="form-group">
-  <label for="password0">钱包密码</label>
-  <input type="text" class="form-control" id="password" [(ngModel)]="password" placeholder="钱包密码" type="password"  aria-describedby="passwordHelpBlock">
-  <p id="passwordHelpBlock" class="form-text text-muted">
-  输入钱包密码。
-</p>
+  <label for="password0">钱包密码：</label>
+  <input type="text" class="form-control" id="password" (keyup.enter)="decryptWallet();" [(ngModel)]="password" placeholder="钱包密码" type="password"  aria-describedby="passwordHelpBlock">
+  <div class="alert" role="alert" *ngIf="tipinfo.isVisble" [ngClass]="tipinfo.class">
+      {{tipinfo.text}}
+  </div>
 </div>
-<button class="btn btn-primary" (click)="decryptWallet()">确认</button>{{tipinfo}}
+<button class="btn btn-primary" (click)="decryptWallet()">确认</button>

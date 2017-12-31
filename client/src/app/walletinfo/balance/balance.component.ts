@@ -31,20 +31,20 @@ export class BalanceComponent implements OnInit {
             }
         })
         this.loadingtip = "正在链接Ripple网络，请稍后...";
-        this.loadingBalance = true;
+        this.loadingBalance = true;        
+        this.gv.walletIsActive = true;
         this.ripple.accountinfo(this.gv.wallet.address).subscribe(result =>{
             this.loadingBalance = false;
             if(result.ok){
                 //this.title = "正在加载资金余额信息，请稍后......";
-                this.gv.walletIsActive = true;
                 this.accountinfo = this.gv.wallet.accountinfo= result.data;
                 this.getBalances(this.gv.wallet.address);
             }else{
-                this.gv.walletIsActive = false;
                 if(result.data.name == "TimeoutError" || result.data.name=="NotConnectedError"){
                     this.title="链接Ripple网络超时，请稍后再试！" ;
                 }else{
-                    this.title="该钱包未激活，请激活后使用。新创建的钱包，需要至少20XRP才能激活。";
+                    this.gv.walletIsActive = false;
+                    this.title="该钱包未激活，请激活后使用";
                 }
                 console.log(result);
             }
